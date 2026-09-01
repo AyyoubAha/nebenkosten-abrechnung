@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ayyoubaha.github.io/nebenkosten-abrechnung/sitemap.xml

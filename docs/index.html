@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nebenkostenabrechnung erstellen – kostenlos, rechtssicher, im Browser (mit CO2-Aufteilung)</title>
+<meta name="description" content="Nebenkostenabrechnung kostenlos erstellen: BGH-konforme Abrechnung je Mieter inkl. Heizkostenverordnung, CO2-Kostenaufteilung (10-Stufen-Modell) und Mieterwechsel. 100 % lokal im Browser – ohne Cloud, ohne Registrierung.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://ayyoubaha.github.io/nebenkosten-abrechnung/">
+<meta property="og:title" content="Nebenkostenabrechnung kostenlos erstellen – mit Heizkosten- und CO2-Aufteilung">
+<meta property="og:description" content="BGH-konforme Abrechnung je Mieter inkl. HeizkostenV, CO2-Stufenmodell und Mieterwechsel. 100 % lokal im Browser.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ayyoubaha.github.io/nebenkosten-abrechnung/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230f766e'/%3E%3Ctext x='16' y='22' font-family='system-ui' font-size='15' font-weight='700' fill='%23fff' text-anchor='middle'%3ENK%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#f6f7f9; --surface:#ffffff; --ink:#1a2332; --ink-soft:#5a6577; --line:#e3e7ee;
+  --accent:#0f766e; --accent-ink:#ffffff; --ok:#1d7a4f; --okbg:#e7f2ea;
+  --err:#a03030; --errbg:#fbecec; --warn:#7a5a1d; --warnbg:#fdf3e3; --badge-bg:#e0f0ee; --badge-ink:#0f766e;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#12161d; --surface:#1a2029; --ink:#e8ecf2; --ink-soft:#9aa5b5; --line:#2b3442;
+    --accent:#2dd4bf; --accent-ink:#0e1420; --ok:#5cc48f; --okbg:#1c2f24;
+    --err:#e08a8a; --errbg:#341e1e; --warn:#e0c070; --warnbg:#2e2617; --badge-bg:#123a36; --badge-ink:#2dd4bf;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15.5px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1020px;margin:0 auto;padding:0 20px}
+header.top{padding:13px 0;border-bottom:1px solid var(--line);background:var(--surface)}
+.top .wrap{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{font-weight:700;font-size:1.05rem}
+.logo span{color:var(--accent)}
+.badge{background:var(--badge-bg);color:var(--badge-ink);font-size:.76rem;font-weight:700;padding:3px 10px;border-radius:99px}
+main{padding:26px 0 40px}
+h1{font-size:clamp(1.35rem,3.2vw,1.8rem);line-height:1.25;margin:0 0 8px}
+.sub{color:var(--ink-soft);max-width:56em;margin:0 0 20px;font-size:.95rem}
+fieldset{border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:16px 16px 8px;margin:0 0 16px;min-width:0}
+legend{font-weight:700;font-size:.92rem;padding:0 6px}
+.grid{display:grid;gap:10px 12px;grid-template-columns:repeat(12,1fr)}
+.f{display:flex;flex-direction:column;gap:3px;margin-bottom:8px}
+.f label{font-size:.76rem;font-weight:600;color:var(--ink-soft)}
+.f input,.f select{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:7px 9px;min-width:0}
+.f input:focus,.f select:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
+.hint{font-size:.74rem;color:var(--ink-soft)}
+.c2{grid-column:span 2}.c3{grid-column:span 3}.c4{grid-column:span 4}.c6{grid-column:span 6}.c12{grid-column:span 12}
+@media(max-width:760px){.c2,.c3,.c4,.c6{grid-column:span 6}}
+table.rows{width:100%;border-collapse:collapse;font-size:.88rem}
+table.rows th{text-align:left;font-size:.72rem;text-transform:uppercase;letter-spacing:.4px;color:var(--ink-soft);padding:4px 6px}
+table.rows td{padding:3px 5px;vertical-align:middle}
+table.rows input,table.rows select{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:6px 8px}
+.rowdel{background:none;border:0;color:var(--err);font-size:1.05rem;cursor:pointer;padding:4px}
+.addrow{background:var(--surface);border:1px dashed var(--accent);color:var(--accent);font:inherit;font-weight:600;border-radius:8px;padding:7px 14px;cursor:pointer;margin:8px 0 6px;font-size:.86rem}
+.tablewrap{overflow-x:auto}
+.check{display:flex;gap:8px;align-items:center;font-size:.9rem;margin:4px 0 8px}
+.cta{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin:14px 0 20px}
+.cta button{font:inherit;font-weight:700;border-radius:10px;padding:11px 24px;cursor:pointer;border:0;background:var(--accent);color:var(--accent-ink);font-size:1rem}
+.cta button.sec{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+.errbox{background:var(--errbg);color:var(--err);border-radius:10px;padding:12px 15px;margin:12px 0;display:none;font-size:.9rem}
+.errbox.show{display:block}
+.warnbox{background:var(--warnbg);color:var(--warn);border-radius:10px;padding:12px 15px;margin:12px 0;display:none;font-size:.88rem}
+.warnbox.show{display:block}
+.warnbox ul{margin:4px 0 0;padding-left:18px}
+.probox{display:none;border:1px solid var(--accent);background:var(--badge-bg);color:var(--ink);border-radius:12px;padding:14px 17px;margin:12px 0;font-size:.9rem}
+.probox.show{display:block}
+.probox b.t{color:var(--badge-ink)}
+.probox ul{margin:6px 0 8px;padding-left:18px}
+.probox a.buy{display:inline-block;background:var(--accent);color:var(--accent-ink);font-weight:700;border-radius:9px;padding:8px 18px;text-decoration:none;margin-top:2px}
+#ergebnis{display:none}
+#ergebnis.show{display:block}
+.abrechnung{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:30px 34px;margin:0 0 18px;box-shadow:0 1px 4px rgba(10,20,40,.05)}
+.abrechnung h2{margin:0 0 2px;font-size:1.15rem}
+.abrechnung .kopf{color:var(--ink-soft);font-size:.85rem;margin-bottom:14px}
+.abrechnung table{width:100%;border-collapse:collapse;font-size:.87rem;margin:10px 0 4px}
+.abrechnung th{text-align:left;font-size:.72rem;text-transform:uppercase;letter-spacing:.4px;color:var(--ink-soft);border-bottom:2px solid var(--line);padding:6px 6px}
+.abrechnung td{border-bottom:1px solid var(--line);padding:7px 6px;vertical-align:top}
+.abrechnung td.r,.abrechnung th.r{text-align:right;white-space:nowrap}
+.saldozeile{display:flex;justify-content:flex-end;gap:30px;font-size:.95rem;margin-top:10px}
+.saldozeile b.nach{color:var(--err)} .saldozeile b.gut{color:var(--ok)}
+.co2block{margin-top:14px;padding:11px 14px;background:var(--bg);border-radius:9px;font-size:.82rem;color:var(--ink-soft)}
+.fussnote{margin-top:12px;font-size:.75rem;color:var(--ink-soft)}
+.printbtn{font:inherit;font-weight:600;font-size:.85rem;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:8px;padding:7px 14px;cursor:pointer;float:right}
+a{color:var(--accent)}
+footer{border-top:1px solid var(--line);margin-top:40px;padding:18px 0 30px;color:var(--ink-soft);font-size:.84rem}
+footer .wrap{display:flex;gap:16px;flex-wrap:wrap}
+@media print{
+  body{background:#fff}
+  header.top,form,.cta,.errbox,.warnbox,footer,.printbtn,#ergebnis>.hint{display:none !important}
+  #ergebnis{display:block !important}
+  .abrechnung{display:none;border:0;box-shadow:none;border-radius:0;padding:0;page-break-after:always}
+  body.print-alle .abrechnung{display:block}
+  .abrechnung.print-eine{display:block !important}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="logo">Nebenkosten<span>abrechnung</span></div>
+    <span class="badge">100 % lokal – Ihre Daten bleiben auf diesem Gerät</span>
+    <span class="badge" style="background:var(--bg);color:var(--ink-soft)">Beta · kostenlos</span>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1>Nebenkostenabrechnung erstellen – mit Heizkosten- und CO2-Aufteilung</h1>
+  <p class="sub">Erstellt je Mietverhältnis eine formell ordnungsgemäße Abrechnung (Gesamtkosten,
+  Umlageschlüssel, Anteil, Vorauszahlungen — BGH-Anforderungen) inklusive
+  <strong>Heizkostenverordnung</strong> (50–70-Split, Warmwasser-Formel),
+  <strong>CO2-Kostenaufteilung</strong> nach dem 10-Stufen-Modell und
+  <strong>unterjährigem Mieterwechsel</strong> (Gradtagszahlen). Alles läuft lokal im Browser —
+  keine Cloud, keine Registrierung. Eingaben werden auf Wunsch nur auf Ihrem Gerät gespeichert.
+  Kostenlos für <strong>ein Mietverhältnis</strong> (das Gebäude ist voll erfassbar, damit die
+  Verteilung stimmt) — alle Mietverhältnisse auf einmal, Mieterwechsel und Sammeldruck gibt es
+  in <a href="pro.html">Pro (39 €, einmalig)</a>. <em>Keine Rechts-/Steuerberatung.</em></p>
+
+  <form id="form" onsubmit="return false">
+    <fieldset>
+      <legend>1 · Zeitraum, Gebäude & Absender</legend>
+      <div class="grid">
+        <div class="f c3"><label>Abrechnungszeitraum von</label><input type="date" id="z_von" value=""></div>
+        <div class="f c3"><label>bis</label><input type="date" id="z_bis" value=""></div>
+        <div class="f c3"><label>Gesamtwohnfläche m² <span class="hint">(leer = Summe Einheiten)</span></label><input id="g_flaeche" inputmode="decimal"></div>
+        <div class="f c3"><label>Objekt (Adresse)</label><input id="g_objekt" placeholder="Musterstr. 1, 12345 Stadt"></div>
+        <div class="f c6"><label>Vermieter (Name)</label><input id="v_name"></div>
+        <div class="f c6"><label>Vermieter (Anschrift)</label><input id="v_adresse"></div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>2 · Wohneinheiten</legend>
+      <div class="tablewrap"><table class="rows" id="t_einheiten">
+        <thead><tr><th style="width:40%">Bezeichnung</th><th style="width:25%">Wohnfläche m²</th><th></th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+      <button type="button" class="addrow" data-add="einheit">+ Einheit</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>3 · Mietverhältnisse <span class="hint">(bei Mieterwechsel: zwei Zeilen mit derselben Einheit und Datumsgrenzen)</span></legend>
+      <div class="tablewrap"><table class="rows" id="t_mieter">
+        <thead><tr><th>Einheit</th><th>Mieter</th><th>von <span class="hint">(leer=Beginn)</span></th><th>bis <span class="hint">(leer=Ende)</span></th><th>Pers.</th><th>Vorauszahlungen €</th><th>Heiz-Grundk. bei Teilzeitraum</th><th></th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+      <button type="button" class="addrow" data-add="mieter">+ Mietverhältnis</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>4 · Kalte Betriebskosten <span class="hint">(§ 2 BetrKV; Verwaltung/Instandhaltung sind nicht umlagefähig)</span></legend>
+      <div class="tablewrap"><table class="rows" id="t_kosten">
+        <thead><tr><th style="width:40%">Kostenart</th><th style="width:20%">Betrag €</th><th style="width:30%">Umlageschlüssel</th><th></th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+      <datalist id="betrkv">
+        <option value="Grundsteuer"><option value="Wasserversorgung"><option value="Entwässerung">
+        <option value="Straßenreinigung/Müll"><option value="Gebäudereinigung"><option value="Gartenpflege">
+        <option value="Beleuchtung"><option value="Schornsteinreinigung"><option value="Sach-/Haftpflichtversicherung">
+        <option value="Hauswart"><option value="Aufzug"><option value="Ungezieferbekämpfung">
+      </datalist>
+      <button type="button" class="addrow" data-add="kosten">+ Kostenart</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>5 · Heizung & Warmwasser (zentrale Anlage)</legend>
+      <div class="check"><input type="checkbox" id="heiz_aktiv" checked><label for="heiz_aktiv">Gebäude hat eine zentrale Heizungs-/Warmwasseranlage</label></div>
+      <div id="heizblock">
+      <div class="grid">
+        <div class="f c3"><label>Heiz-/WW-Kosten gesamt €</label><input id="h_kosten" inputmode="decimal"></div>
+        <div class="f c3"><label>Energiemenge kWh</label><input id="h_kwh" inputmode="decimal"></div>
+        <div class="f c3"><label>Verbrauchsanteil % <span class="hint">(50–70)</span></label><input id="h_va" inputmode="numeric" value="70"></div>
+        <div class="f c3"><label>CO2-Ausnahme § 9</label><select id="h_co2aus"><option value="keine">keine</option><option value="halb">halbiert (eine Vorgabe)</option><option value="voll">entfällt (beide Vorgaben)</option></select></div>
+        <div class="f c3"><label>CO2-Menge kg <span class="hint">(lt. Rechnung)</span></label><input id="h_co2kg" inputmode="decimal"></div>
+        <div class="f c3"><label>CO2-Kosten € <span class="hint">(lt. Rechnung)</span></label><input id="h_co2eur" inputmode="decimal"></div>
+        <div class="f c3"><label>Warmwasser-Ermittlung</label><select id="h_wwmethode">
+          <option value="formel">Formel: 2,5 × m³ × (t−10)</option>
+          <option value="gemessen">Wärmezähler (kWh)</option>
+          <option value="flaeche">Pauschal 32 × m²</option>
+          <option value="ohne">kein zentrales Warmwasser</option>
+        </select></div>
+        <div class="f c3" id="f_wwkorr"><label>Korrektur</label><select id="h_wwkorr">
+          <option value="">keine</option>
+          <option value="brennwertgas">Erdgas Brennwert (×1,11)</option>
+          <option value="waermelieferung">Wärmelieferung (÷1,15)</option>
+          <option value="waermepumpe">Wärmepumpe (×0,30)</option>
+        </select></div>
+        <div class="f c3" id="f_wwm3"><label>WW-Volumen gesamt m³</label><input id="h_wwm3" inputmode="decimal"></div>
+        <div class="f c3" id="f_wwtemp"><label>WW-Temperatur °C</label><input id="h_wwtemp" inputmode="decimal" value="60"></div>
+        <div class="f c3" id="f_wwkwh" style="display:none"><label>WW-Wärmemenge kWh</label><input id="h_wwkwh" inputmode="decimal"></div>
+      </div>
+      <div class="hint" style="margin:4px 0 8px">Verbräuche je Mietverhältnis (bei Mieterwechsel = Zwischenablesung):</div>
+      <div class="tablewrap"><table class="rows" id="t_verbrauch">
+        <thead><tr><th>Mietverhältnis</th><th>Heizung (HKV-Einheiten / kWh)</th><th>Warmwasser m³</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+      </div>
+    </fieldset>
+  </form>
+
+  <div class="errbox" id="errbox"></div>
+  <div class="cta">
+    <button type="button" id="berechnen">Abrechnung berechnen</button>
+    <button type="button" class="sec" id="drucken_alle">🖨 Alle drucken</button>
+    <button type="button" class="sec" id="export">Daten sichern (.json)</button>
+    <button type="button" class="sec" id="importbtn">Daten laden</button>
+    <input type="file" id="importfile" accept=".json" hidden>
+    <span class="hint">Automatische Speicherung nur lokal in diesem Browser.</span>
+  </div>
+  <div class="warnbox" id="warnbox"></div>
+
+  <div class="probox" id="probox">
+    <b class="t" id="progrund">Pro-Funktion.</b>
+    <div><b>Nebenkostenabrechnung Pro</b> — einmalig 39 €, läuft als Datei komplett lokal auf Ihrem Rechner:</div>
+    <ul>
+      <li>bis <b>10 Wohneinheiten</b> und beliebige Mietverhältnisse je Einheit</li>
+      <li><b>Mieterwechsel</b> im Abrechnungsjahr (Zwischenablesung, Gradtagszahlen oder Zeitanteil)</li>
+      <li>CO2-Sonderfälle nach <b>§ 9 CO2KostAufG</b> (Denkmalschutz/Milieuschutz)</li>
+      <li>Daten sichern & wiederladen (JSON), <b>Sammeldruck</b> aller Abrechnungen</li>
+      <li>alle Rechenregeln wie hier: HeizkostenV, CO2-Stufenmodell, BGH-Formalia</li>
+    </ul>
+    <a class="buy" id="prolink" href="pro.html">Pro ansehen →</a>
+  </div>
+
+  <div id="ergebnis"></div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Nebenkostenabrechnung</span>
+    <a href="pro.html">Pro-Version (39 €)</a>
+    <a href="nebenkostenabrechnung-erstellen.html">Ratgeber: Abrechnung erstellen</a>
+    <a href="co2-kosten-vermieter-rechner.html">CO2-Kosten aufteilen</a>
+    <a href="nebenkostenabrechnung-mieterwechsel.html">Mieterwechsel</a>
+    <a href="https://ayyoubaha.github.io/e-rechnung-viewer/" rel="noopener">E-Rechnung-Tools</a>
+    <a href="impressum.html">Impressum</a>
+    <a href="datenschutz.html">Datenschutz</a>
+    <span>Hinweise ohne Gewähr — keine Rechts-/Steuerberatung.</span>
+  </div>
+</footer>
+<script data-goatcounter="https://ayyoubaha.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+
+<script type="module">
+import { berechneAbrechnung, r2 } from './engine.mjs';
+
+const PRO = document.documentElement.dataset.pro === '1';
+// Freier Modus rechnet EIN Mietverhältnis ab; das Gebäude ist immer voll erfassbar,
+// damit der HeizkostenV-Split über alle Einheiten korrekt bleibt.
+const LIMIT = { einheiten: 10, mieter: PRO ? 60 : 1 };
+const $ = (id) => document.getElementById(id);
+const fmt = (n) => new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(n || 0);
+const fmtD = (iso) => iso ? `${iso.slice(8,10)}.${iso.slice(5,7)}.${iso.slice(0,4)}` : '';
+const escT = (s) => String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;');
+const num = (v) => { const n = Number(String(v ?? '').replace(',', '.')); return Number.isFinite(n) ? n : 0; };
+
+// ---------- dynamische Zeilen ----------
+const tb = (id) => $(id).querySelector('tbody');
+
+function addEinheit(v = {}) {
+  if (tb('t_einheiten').children.length >= LIMIT.einheiten) {
+    showPro(PRO ? `Diese Version unterstützt bis ${LIMIT.einheiten} Wohneinheiten.` : 'Mehr als eine Wohneinheit gibt es in der Pro-Version.');
+    return;
+  }
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td><input class="e_name" placeholder="z. B. EG links"></td>
+    <td><input class="e_flaeche" inputmode="decimal"></td>
+    <td><button type="button" class="rowdel">✕</button></td>`;
+  tr.querySelector('.e_name').value = v.name || '';
+  tr.querySelector('.e_flaeche').value = v.flaeche ?? '';
+  tr.querySelector('.rowdel').onclick = () => { tr.remove(); syncMieterEinheiten(); };
+  tr.querySelector('.e_name').addEventListener('input', syncMieterEinheiten);
+  tb('t_einheiten').append(tr);
+}
+function einheitenNamen() {
+  return [...tb('t_einheiten').querySelectorAll('.e_name')].map((i) => i.value.trim()).filter(Boolean);
+}
+function addMieter(v = {}) {
+  if (tb('t_mieter').children.length >= LIMIT.mieter) {
+    showPro(PRO ? `Diese Version unterstützt bis ${LIMIT.mieter} Mietverhältnisse.` : 'Mieterwechsel und mehrere Mietverhältnisse gibt es in der Pro-Version.');
+    return;
+  }
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td><select class="m_einheit"></select></td>
+    <td><input class="m_name" placeholder="Name"></td>
+    <td><input class="m_von" type="date"></td>
+    <td><input class="m_bis" type="date"></td>
+    <td style="width:52px"><input class="m_pers" inputmode="numeric" value="1"></td>
+    <td><input class="m_voraus" inputmode="decimal"></td>
+    <td><select class="m_methode"><option value="gtz">Gradtagszahlen</option><option value="zeitanteil">Zeitanteil</option></select></td>
+    <td><button type="button" class="rowdel">✕</button></td>`;
+  tr.querySelector('.m_name').value = v.mieter || '';
+  tr.querySelector('.m_von').value = v.von || '';
+  tr.querySelector('.m_bis').value = v.bis || '';
+  tr.querySelector('.m_pers').value = v.personen ?? 1;
+  tr.querySelector('.m_voraus').value = v.vorauszahlungen ?? '';
+  tr.querySelector('.m_methode').value = v.grundkostenMethode || 'gtz';
+  tr.querySelector('.rowdel').onclick = () => { tr.remove(); syncVerbrauch(); };
+  tr.querySelector('.m_name').addEventListener('input', syncVerbrauch);
+  tb('t_mieter').append(tr);
+  syncMieterEinheiten();
+  const sel = tr.querySelector('.m_einheit');
+  if (v.einheit) sel.value = v.einheit;
+  sel.addEventListener('change', syncVerbrauch);
+  syncVerbrauch();
+}
+function syncMieterEinheiten() {
+  const namen = einheitenNamen();
+  for (const sel of tb('t_mieter').querySelectorAll('.m_einheit')) {
+    const cur = sel.value;
+    sel.innerHTML = namen.map((n) => `<option>${escT(n)}</option>`).join('');
+    if (namen.includes(cur)) sel.value = cur;
+  }
+  syncVerbrauch();
+}
+function addKosten(v = {}) {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td><input class="k_art" list="betrkv"></td>
+    <td><input class="k_betrag" inputmode="decimal"></td>
+    <td><select class="k_schluessel">
+      <option value="flaeche">Wohnfläche</option>
+      <option value="einheiten">Einheiten</option>
+      <option value="personen">Personen(-tage)</option>
+    </select></td>
+    <td><button type="button" class="rowdel">✕</button></td>`;
+  tr.querySelector('.k_art').value = v.art || '';
+  tr.querySelector('.k_betrag').value = v.betrag ?? '';
+  tr.querySelector('.k_schluessel').value = v.schluessel || 'flaeche';
+  tr.querySelector('.rowdel').onclick = () => tr.remove();
+  tb('t_kosten').append(tr);
+}
+function syncVerbrauch() {
+  const body = tb('t_verbrauch');
+  const alt = {};
+  for (const tr of body.querySelectorAll('tr')) {
+    alt[tr.dataset.key] = { h: tr.querySelector('.vb_h').value, w: tr.querySelector('.vb_w').value };
+  }
+  body.innerHTML = '';
+  const belegte = new Set();
+  [...tb('t_mieter').querySelectorAll('tr')].forEach((mtr, i) => {
+    const einheit = mtr.querySelector('.m_einheit').value || '?';
+    belegte.add(einheit);
+    const name = mtr.querySelector('.m_name').value || `Mieter ${i + 1}`;
+    const key = `MV${i}`;
+    const tr = document.createElement('tr');
+    tr.dataset.key = key;
+    tr.innerHTML = `<td>${escT(einheit)} · ${escT(name)}</td>
+      <td><input class="vb_h" inputmode="decimal"></td>
+      <td><input class="vb_w" inputmode="decimal"></td>`;
+    if (alt[key]) { tr.querySelector('.vb_h').value = alt[key].h; tr.querySelector('.vb_w').value = alt[key].w; }
+    body.append(tr);
+  });
+  // Einheiten ohne Mietverhältnis: Verbrauch zählt im Verteilungsmaßstab mit,
+  // der Kostenanteil verbleibt beim Vermieter (Leerstand/Selbstnutzung).
+  for (const n of einheitenNamen()) {
+    if (belegte.has(n)) continue;
+    const tr = document.createElement('tr');
+    tr.dataset.key = n;
+    tr.innerHTML = `<td>${escT(n)} · <em>ohne Mietverhältnis (Leerstand/Selbstnutzung)</em></td>
+      <td><input class="vb_h" inputmode="decimal"></td>
+      <td><input class="vb_w" inputmode="decimal"></td>`;
+    if (alt[n]) { tr.querySelector('.vb_h').value = alt[n].h; tr.querySelector('.vb_w').value = alt[n].w; }
+    body.append(tr);
+  }
+}
+
+// ---------- Zustand lesen/schreiben ----------
+function readState() {
+  const einheiten = [...tb('t_einheiten').querySelectorAll('tr')].map((tr) => ({
+    name: tr.querySelector('.e_name').value.trim(),
+    flaeche: num(tr.querySelector('.e_flaeche').value),
+  })).filter((e) => e.name);
+  const mieter = [...tb('t_mieter').querySelectorAll('tr')].map((tr, i) => ({
+    id: `MV${i}`,
+    einheit: tr.querySelector('.m_einheit').value,
+    mieter: tr.querySelector('.m_name').value.trim(),
+    von: tr.querySelector('.m_von').value || undefined,
+    bis: tr.querySelector('.m_bis').value || undefined,
+    personen: num(tr.querySelector('.m_pers').value) || 1,
+    vorauszahlungen: num(tr.querySelector('.m_voraus').value),
+    grundkostenMethode: tr.querySelector('.m_methode').value,
+  }));
+  const kosten = [...tb('t_kosten').querySelectorAll('tr')].map((tr) => ({
+    art: tr.querySelector('.k_art').value.trim(),
+    betrag: num(tr.querySelector('.k_betrag').value),
+    schluessel: tr.querySelector('.k_schluessel').value,
+  })).filter((k) => k.art && k.betrag);
+  const verbrauchH = {}, verbrauchW = {};
+  for (const tr of tb('t_verbrauch').querySelectorAll('tr')) {
+    verbrauchH[tr.dataset.key] = num(tr.querySelector('.vb_h').value);
+    verbrauchW[tr.dataset.key] = num(tr.querySelector('.vb_w').value);
+  }
+  return {
+    meta: { objekt: $('g_objekt').value, vermieter: $('v_name').value, vermieterAdresse: $('v_adresse').value },
+    zeitraum: { von: $('z_von').value, bis: $('z_bis').value },
+    gebaeudeFlaeche: num($('g_flaeche').value),
+    einheiten, mieter, kosten,
+    heizung: $('heiz_aktiv').checked ? {
+      kosten: num($('h_kosten').value), kwh: num($('h_kwh').value), va: num($('h_va').value) || 70,
+      co2kg: num($('h_co2kg').value), co2eur: num($('h_co2eur').value), co2aus: PRO ? $('h_co2aus').value : 'keine',
+      wwMethode: $('h_wwmethode').value, wwKorr: $('h_wwkorr').value,
+      wwM3: num($('h_wwm3').value), wwTemp: num($('h_wwtemp').value) || 60, wwKwh: num($('h_wwkwh').value),
+      verbrauchH, verbrauchW,
+    } : null,
+  };
+}
+
+let silentAdd = false;
+function writeState(s) {
+  silentAdd = true;
+  try { writeStateInner(s); } finally { silentAdd = false; }
+}
+function writeStateInner(s) {
+  $('z_von').value = s.zeitraum?.von || '';
+  $('z_bis').value = s.zeitraum?.bis || '';
+  $('g_flaeche').value = s.gebaeudeFlaeche || '';
+  $('g_objekt').value = s.meta?.objekt || '';
+  $('v_name').value = s.meta?.vermieter || '';
+  $('v_adresse').value = s.meta?.vermieterAdresse || '';
+  tb('t_einheiten').innerHTML = ''; (s.einheiten || []).forEach(addEinheit);
+  tb('t_mieter').innerHTML = ''; (s.mieter || []).forEach(addMieter);
+  tb('t_kosten').innerHTML = ''; (s.kosten || []).forEach(addKosten);
+  if (s.heizung) {
+    $('heiz_aktiv').checked = true;
+    $('h_kosten').value = s.heizung.kosten || '';
+    $('h_kwh').value = s.heizung.kwh || '';
+    $('h_va').value = s.heizung.va || 70;
+    $('h_co2kg').value = s.heizung.co2kg || '';
+    $('h_co2eur').value = s.heizung.co2eur || '';
+    $('h_co2aus').value = s.heizung.co2aus || 'keine';
+    $('h_wwmethode').value = s.heizung.wwMethode || 'formel';
+    $('h_wwkorr').value = s.heizung.wwKorr || '';
+    $('h_wwm3').value = s.heizung.wwM3 || '';
+    $('h_wwtemp').value = s.heizung.wwTemp || 60;
+    $('h_wwkwh').value = s.heizung.wwKwh || '';
+    syncVerbrauch();
+    [...tb('t_verbrauch').querySelectorAll('tr')].forEach((tr) => {
+      tr.querySelector('.vb_h').value = s.heizung.verbrauchH?.[tr.dataset.key] ?? '';
+      tr.querySelector('.vb_w').value = s.heizung.verbrauchW?.[tr.dataset.key] ?? '';
+    });
+  } else if (s.heizung === null) {
+    $('heiz_aktiv').checked = false;
+  }
+  toggleHeiz(); toggleWW();
+}
+
+const STORE = 'nk-abrechnung-v1';
+function save() { try { localStorage.setItem(STORE, JSON.stringify(readState())); } catch {} }
+function load() { try { const raw = localStorage.getItem(STORE); if (raw) { writeState(JSON.parse(raw)); return true; } } catch {} return false; }
+
+// ---------- Berechnung + Darstellung ----------
+function buildEngineInput(s) {
+  const fehler = [];
+  if (!s.zeitraum.von || !s.zeitraum.bis) fehler.push('Abrechnungszeitraum (von/bis) angeben.');
+  if (!s.einheiten.length) fehler.push('Mindestens eine Wohneinheit anlegen.');
+  if (!s.mieter.length) fehler.push('Mindestens ein Mietverhältnis anlegen.');
+  for (const m of s.mieter) if (!m.mieter) fehler.push('Jedes Mietverhältnis braucht einen Mieternamen.');
+  if (s.heizung && (!s.heizung.kosten || !s.heizung.kwh)) fehler.push('Heizung: Kosten und Energiemenge (kWh) angeben — oder Haken bei „zentrale Anlage" entfernen.');
+  if (!PRO && (s.einheiten.length > LIMIT.einheiten || s.mieter.length > LIMIT.mieter)) {
+    fehler.push('Die kostenlose Version rechnet eine Wohneinheit mit einem Mietverhältnis ab — mehr Einheiten und Mieterwechsel gibt es in der Pro-Version (39 €, einmalig).');
+  }
+  if (fehler.length) return { fehler };
+
+  const flaecheSum = s.einheiten.reduce((a, e) => a + e.flaeche, 0);
+  const input = {
+    zeitraum: s.zeitraum,
+    gebaeude: { wohnflaeche: s.gebaeudeFlaeche || flaecheSum },
+    einheiten: s.einheiten.map((e) => ({ id: e.name, flaeche: e.flaeche })),
+    mietverhaeltnisse: s.mieter.map((m) => ({ ...m })),
+    kalteKosten: s.kosten.map((k) => ({ art: k.art, betrag: k.betrag, schluessel: k.schluessel })),
+  };
+  if (s.heizung) {
+    input.heizung = {
+      kostenGesamt: s.heizung.kosten,
+      energieKwh: s.heizung.kwh,
+      verbrauchsanteil: s.heizung.va,
+      co2: (s.heizung.co2eur > 0) ? { kg: s.heizung.co2kg, kosten: s.heizung.co2eur, ausnahme: s.heizung.co2aus } : null,
+      warmwasser: s.heizung.wwMethode === 'ohne' ? null : {
+        methode: s.heizung.wwMethode, qKwh: s.heizung.wwKwh, volumenM3: s.heizung.wwM3,
+        temperatur: s.heizung.wwTemp, korrektur: s.heizung.wwKorr || undefined,
+      },
+      verbraeucheHeizung: s.heizung.verbrauchH,
+      verbraeucheWarmwasser: s.heizung.verbrauchW,
+    };
+  }
+  return { input };
+}
+
+function berechnen() {
+  $('errbox').classList.remove('show');
+  $('warnbox').classList.remove('show');
+  save();
+  const s = readState();
+  const { input, fehler } = buildEngineInput(s);
+  if (fehler) {
+    $('errbox').innerHTML = '<strong>Bitte vervollständigen:</strong><ul>' + fehler.map((f) => `<li>${escT(f)}</li>`).join('') + '</ul>';
+    $('errbox').classList.add('show');
+    return;
+  }
+  let r;
+  try { r = berechneAbrechnung(input); }
+  catch (e) { $('errbox').textContent = '⚠ ' + e.message; $('errbox').classList.add('show'); return; }
+
+  if (r.warnungen.length) {
+    $('warnbox').innerHTML = '<strong>Hinweise:</strong><ul>' + r.warnungen.map((x) => `<li>${escT(x)}</li>`).join('') + '</ul>';
+    $('warnbox').classList.add('show');
+  }
+  renderErgebnis(s, r);
+}
+
+function renderErgebnis(s, r) {
+  const box = $('ergebnis');
+  box.innerHTML = '<p class="hint">Zum Drucken einer einzelnen Abrechnung den Button auf der jeweiligen Karte nutzen — der Druckdialog kann als PDF speichern.</p>';
+  const co2 = r.gebaeude.co2;
+  r.proMietverhaeltnis.forEach((p, i) => {
+    const card = document.createElement('article');
+    card.className = 'abrechnung';
+    const zeilen = p.posten.map((x) => `<tr>
+      <td>${escT(x.bezeichnung)}</td>
+      <td class="r">${fmt(x.gesamt)}</td>
+      <td>${escT(x.schluessel)}</td>
+      <td>${escT(x.anteilText)}</td>
+      <td class="r">${fmt(x.betrag)}</td>
+    </tr>`).join('');
+    const saldoTxt = p.saldo > 0 ? `Nachzahlung: <b class="nach">${fmt(p.saldo)}</b>` : p.saldo < 0 ? `Guthaben: <b class="gut">${fmt(-p.saldo)}</b>` : '<b>ausgeglichen</b>';
+    card.innerHTML = `
+      <button type="button" class="printbtn" data-print="${i}">🖨 Diese Abrechnung drucken</button>
+      <h2>Betriebs- und Heizkostenabrechnung</h2>
+      <div class="kopf">
+        ${escT(s.meta.vermieter || '')}${s.meta.vermieterAdresse ? ' · ' + escT(s.meta.vermieterAdresse) : ''}<br>
+        Objekt: ${escT(s.meta.objekt || '—')} · Einheit: <b>${escT(p.einheit)}</b> · Mieter: <b>${escT(p.mieter)}</b><br>
+        Abrechnungszeitraum: ${fmtD(r.zeitraum.von)} – ${fmtD(r.zeitraum.bis)} · Nutzungszeitraum: ${fmtD(p.von)} – ${fmtD(p.bis)}
+      </div>
+      <div class="tablewrap"><table>
+        <thead><tr><th>Kostenart</th><th class="r">Gesamtkosten</th><th>Umlageschlüssel</th><th>Ihr Anteil (Berechnung)</th><th class="r">Betrag</th></tr></thead>
+        <tbody>${zeilen}</tbody>
+      </table></div>
+      <div class="saldozeile"><span>Summe Ihrer Anteile: <b>${fmt(p.summe)}</b></span>
+        <span>Vorauszahlungen: <b>${p.vorauszahlungen ? '−' + fmt(p.vorauszahlungen) : fmt(0)}</b></span>
+        <span>${saldoTxt}</span></div>
+      ${co2 && co2.vermieterAnteil > 0 ? `<div class="co2block"><b>CO2-Kostenaufteilung (CO2KostAufG):</b>
+        Einstufung des Gebäudes: ${String(co2.spezifisch).replace('.', ',')} kg CO2/m²·a →
+        Vermieteranteil ${co2.vermieterProzent} % (${fmt(co2.vermieterAnteil)} von ${fmt(co2.vermieterAnteil + co2.mieterAnteil)} CO2-Kosten,
+        bereits von den umgelegten Heizkosten abgezogen). Auf die Mieter entfallen ${fmt(co2.mieterAnteil)}.</div>` : ''}
+      <div class="fussnote">Einwendungen gegen diese Abrechnung sind innerhalb von 12 Monaten nach Zugang mitzuteilen (§ 556 Abs. 3 BGB).
+      Belegeinsicht nach Vereinbarung. Erstellt am ${new Date().toLocaleDateString('de-DE')} — Berechnung nach HeizkostenV und CO2KostAufG.</div>`;
+    box.append(card);
+  });
+  box.querySelectorAll('.printbtn').forEach((b) => b.onclick = () => {
+    const cards = box.querySelectorAll('.abrechnung');
+    cards.forEach((c) => c.classList.remove('print-eine'));
+    cards[Number(b.dataset.print)].classList.add('print-eine');
+    document.body.classList.remove('print-alle');
+    window.print();
+  });
+  box.classList.add('show');
+  box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ---------- UI-Verhalten ----------
+function showPro(grund) {
+  if (silentAdd) return;
+  if (PRO) { $('warnbox').innerHTML = '<strong>' + escT(grund) + '</strong>'; $('warnbox').classList.add('show'); return; }
+  $('progrund').textContent = grund + ' ';
+  $('probox').classList.add('show');
+  $('probox').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+function toggleHeiz() { $('heizblock').style.display = $('heiz_aktiv').checked ? '' : 'none'; }
+function toggleWW() {
+  const m = $('h_wwmethode').value;
+  $('f_wwm3').style.display = m === 'formel' ? '' : 'none';
+  $('f_wwtemp').style.display = m === 'formel' ? '' : 'none';
+  $('f_wwkwh').style.display = m === 'gemessen' ? '' : 'none';
+  $('f_wwkorr').style.display = m === 'ohne' ? 'none' : '';
+}
+$('heiz_aktiv').onchange = toggleHeiz;
+$('h_wwmethode').onchange = toggleWW;
+document.querySelectorAll('[data-add]').forEach((b) => b.onclick = () => {
+  ({ einheit: addEinheit, mieter: addMieter, kosten: addKosten })[b.dataset.add]();
+});
+$('berechnen').onclick = berechnen;
+$('drucken_alle').onclick = () => { document.body.classList.add('print-alle'); window.print(); };
+$('export').onclick = () => {
+  const blob = new Blob([JSON.stringify(readState(), null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `nebenkosten_${$('z_von').value || 'daten'}.json`;
+  document.body.append(a); a.click(); a.remove();
+};
+$('importbtn').onclick = () => $('importfile').click();
+$('importfile').onchange = async () => {
+  const f = $('importfile').files[0];
+  if (!f) return;
+  try { writeState(JSON.parse(await f.text())); save(); }
+  catch { $('errbox').textContent = '⚠ Datei konnte nicht gelesen werden.'; $('errbox').classList.add('show'); }
+  $('importfile').value = '';
+};
+document.addEventListener('input', () => save());
+
+// Freier Modus: Pro-Funktionen ausblenden/sperren
+if (!PRO) {
+  $('export').style.display = 'none';
+  $('importbtn').style.display = 'none';
+  $('drucken_alle').style.display = 'none';
+  $('h_co2aus').disabled = true;
+  $('h_co2aus').title = 'Pro-Funktion (§ 9 CO2KostAufG)';
+  $('h_co2aus').closest('.f').querySelector('label').textContent = 'CO2-Ausnahme § 9 (Pro)';
+}
+
+// Test-Hook (E2E) + Start
+window.__nkLoad = (state) => { writeState(state); berechnen(); };
+if (!load()) {
+  const jahr = new Date().getFullYear() - 1;
+  $('z_von').value = `${jahr}-01-01`;
+  $('z_bis').value = `${jahr}-12-31`;
+  addEinheit(); addMieter(); addKosten({ art: 'Grundsteuer' });
+}
+toggleHeiz(); toggleWW();
+</script>
+</body>
+</html>
