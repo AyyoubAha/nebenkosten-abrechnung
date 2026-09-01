@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Heizkostenabrechnung selbst erstellen: HeizkostenV Schritt für Schritt (mit Beispiel)</title>
+<meta name="description" content="Heizkostenabrechnung selbst erstellen nach Heizkostenverordnung: Warmwasser abtrennen (§ 9), 50–70-Split, CO2-Kosten aufteilen, Mieterwechsel — komplett durchgerechnetes Beispiel und kostenloser Rechner.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://ayyoubaha.github.io/nebenkosten-abrechnung/heizkostenabrechnung-selbst-erstellen.html">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230f766e'/%3E%3Ctext x='16' y='22' font-family='system-ui' font-size='15' font-weight='700' fill='%23fff' text-anchor='middle'%3ENK%3C/text%3E%3C/svg%3E">
+<style>
+:root{--bg:#f6f7f9;--surface:#fff;--ink:#1a2332;--ink-soft:#5a6577;--line:#e3e7ee;--accent:#0f766e;--accent-ink:#fff;--warnbg:#fdf3e3;--warn:#7a5a1d}
+@media (prefers-color-scheme: dark){:root{--bg:#12161d;--surface:#1a2029;--ink:#e8ecf2;--ink-soft:#9aa5b5;--line:#2b3442;--accent:#2dd4bf;--accent-ink:#0e1420;--warnbg:#2e2617;--warn:#e0c070}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px}
+header.top{padding:13px 0;border-bottom:1px solid var(--line);background:var(--surface)}
+.top .wrap{display:flex;align-items:center;gap:12px;flex-wrap:wrap;max-width:900px}
+.logo{font-weight:700;font-size:1.05rem}.logo a{color:inherit;text-decoration:none}.logo span{color:var(--accent)}
+main{padding:30px 0 50px}
+h1{font-size:clamp(1.35rem,3.2vw,1.75rem);line-height:1.25;margin:0 0 10px}
+h2{font-size:1.15rem;margin:30px 0 8px}
+p{margin:10px 0}
+.meta{color:var(--ink-soft);font-size:.85rem;margin-bottom:16px}
+table{width:100%;border-collapse:collapse;font-size:.9rem;background:var(--surface);border:1px solid var(--line)}
+th,td{padding:7px 10px;border-bottom:1px solid var(--line);text-align:left}
+th{font-size:.74rem;text-transform:uppercase;letter-spacing:.4px;color:var(--ink-soft)}
+td.r,th.r{text-align:right;white-space:nowrap}
+.tablewrap{overflow-x:auto;margin:12px 0}
+.beispiel{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:8px;padding:12px 16px;margin:14px 0}
+.hinweis{background:var(--warnbg);color:var(--warn);border-radius:8px;padding:11px 14px;margin:14px 0;font-size:.92rem}
+.cta{display:inline-block;background:var(--accent);color:var(--accent-ink);font-weight:700;border-radius:10px;padding:11px 22px;text-decoration:none;margin:8px 0}
+a{color:var(--accent)}
+footer{border-top:1px solid var(--line);margin-top:40px;padding:18px 0 30px;color:var(--ink-soft);font-size:.84rem}
+footer .wrap{display:flex;gap:16px;flex-wrap:wrap;max-width:900px}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="logo"><a href="index.html">Nebenkosten<span>abrechnung</span></a></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1>Heizkostenabrechnung selbst erstellen: die Rechenkette der Heizkostenverordnung</h1>
+  <p class="meta">Stand: September 2026 · Rechtsgrundlagen: HeizkostenV, CO2KostAufG</p>
+
+  <p>Bei zentraler Heizungs- oder Warmwasseranlage dürfen Heizkosten <strong>nicht einfach nach
+  Wohnfläche</strong> umgelegt werden — die Heizkostenverordnung schreibt eine feste Rechenkette
+  vor. Wer sie einhält, ist rechtlich auf der sicheren Seite; wer sie ignoriert, riskiert das
+  <strong>15-%-Kürzungsrecht</strong> des Mieters (§ 12 HeizkostenV). Hier die Kette Schritt für
+  Schritt, mit einem vollständig durchgerechneten Beispiel.</p>
+
+  <div class="beispiel"><strong>Beispielgebäude:</strong> 240 m² Wohnfläche (3 Wohnungen à 80 m²),
+  Erdgas-Zentralheizung mit Warmwasser. Jahresrechnung: <b>3.000 €</b>, <b>24.000 kWh</b>,
+  CO2-Ausweis: 4.824 kg / 289,44 €. Warmwasserverbrauch 60 m³ bei 60 °C.</div>
+
+  <h2>Schritt 1: Umlagefähige Gesamtkosten bestimmen</h2>
+  <p>Zu den Kosten gehören Brennstoff bzw. Wärmelieferung, Betriebsstrom, Wartung, Messdienst und
+  Schornsteinfeger (§ 7 Abs. 2 HeizkostenV) — nicht aber Reparaturen. Bei <strong>Heizöl, Pellets
+  oder Flüssiggas</strong> gilt das Leistungsprinzip: Nur der im Zeitraum <em>verbrauchte</em>
+  Brennstoff zählt (Restbestand zu Beginn + Käufe − Restbestand am Ende), nicht die bezahlten
+  Rechnungen.</p>
+
+  <h2>Schritt 2: CO2-Kosten zwischen Vermieter und Mieter aufteilen</h2>
+  <p>Seit 2023 zuerst: CO2-Ausstoß pro m² berechnen, Stufe ablesen, Vermieteranteil
+  <strong>vor der Verteilung abziehen</strong> und in der Abrechnung ausweisen.</p>
+  <div class="beispiel">4.824 kg ÷ 240 m² = 20,1 kg/m² → Stufe 20 % → Vermieter trägt
+  <b>57,89 €</b>. Verbleibender Topf: 3.000 − 57,89 = <b>2.942,11 €</b>.
+  Tabelle und Details: <a href="co2-kosten-vermieter-rechner.html">CO2-Kosten aufteilen</a>.</div>
+
+  <h2>Schritt 3: Warmwasser abtrennen (§ 9 HeizkostenV)</h2>
+  <p>Bei verbundener Anlage wird der Warmwasseranteil der Wärmemenge bestimmt — per Wärmezähler
+  oder mit der Ersatzformel:</p>
+  <div class="beispiel">Q<sub>WW</sub> = 2,5 × Volumen × (Temperatur − 10) = 2,5 × 60 m³ × 50 K =
+  <b>7.500 kWh</b> von 24.000 kWh = 31,25 %.<br>
+  Warmwasser-Topf: 2.942,11 € × 31,25 % = <b>919,41 €</b> · Heizungs-Topf: <b>2.022,70 €</b>.<br>
+  <span style="font-size:.85em">Korrekturen: Erdgas-Brennwertgeräte ×1,11 · Wärmelieferung ÷1,15 ·
+  Wärmepumpe ×0,30 (jeweils auf die Verbrauchsmessung nach § 9 Abs. 2).</span></div>
+
+  <h2>Schritt 4: Beide Töpfe in Grund- und Verbrauchskosten teilen (50–70 %)</h2>
+  <p>Mindestens 50, höchstens 70 % nach erfasstem Verbrauch; der Rest nach Wohnfläche.
+  In bestimmten Fällen (u. a. freiliegende, überwiegend ungedämmte Leitungen) sind zwingend 70 %
+  vorgeschrieben.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th></th><th class="r">Grundkosten (30 %)</th><th class="r">Verbrauchskosten (70 %)</th></tr></thead>
+    <tbody>
+      <tr><td>Heizung (2.022,70 €)</td><td class="r">606,81 €</td><td class="r">1.415,89 €</td></tr>
+      <tr><td>Warmwasser (919,41 €)</td><td class="r">275,82 €</td><td class="r">643,59 €</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>Schritt 5: Auf die Wohnungen verteilen</h2>
+  <p>Grundkosten nach Wohnfläche, Verbrauchskosten nach Erfassung (Heizkostenverteiler/Wärmezähler
+  bzw. Warmwasserzähler). Für Wohnung A (80 m², 400 von 1.000 Verbrauchseinheiten, 20 von 60 m³
+  Warmwasser):</p>
+  <div class="beispiel">Heizung: 606,81 × 80/240 = <b>202,27 €</b> + 1.415,89 × 400/1000 =
+  <b>566,36 €</b><br>Warmwasser: 275,82 × 80/240 = <b>91,94 €</b> + 643,59 × 20/60 =
+  <b>214,53 €</b><br>Heiz-/Warmwasserkosten Wohnung A gesamt: <b>1.075,10 €</b></div>
+  <p>Wohnungen ohne Mietverhältnis (Leerstand, Selbstnutzung) bleiben im Verteilungsmaßstab —
+  ihr Anteil geht zulasten des Vermieters, nicht der übrigen Mieter.</p>
+
+  <h2>Schritt 6: Sonderfall Mieterwechsel</h2>
+  <p>Bei Nutzerwechsel im Abrechnungsjahr: Verbrauchskosten über die <strong>Zwischenablesung</strong>,
+  Grundkosten nach <strong>Gradtagszahlen oder Zeitanteil</strong> (§ 9b HeizkostenV) —
+  ausführlich im Ratgeber <a href="nebenkostenabrechnung-mieterwechsel.html">Mieterwechsel</a>.</p>
+
+  <div class="hinweis"><strong>Kürzungsrechte des Mieters:</strong> 15 % bei Verstoß gegen die
+  verbrauchsabhängige Abrechnung (§ 12 HeizkostenV) · 3 % bei fehlendem CO2-Ausweis
+  (§ 7 Abs. 4 CO2KostAufG). Beides vermeidet, wer die Kette oben einhält und ausweist.</div>
+
+  <h2>In zwei Minuten statt zwei Stunden</h2>
+  <p>Der kostenlose Rechner führt genau diese Rechenkette aus — CO2-Abzug, § 9-Abtrennung samt
+  Korrekturfaktoren, 50–70-Split, Verteilung, Ausweis — und erzeugt je Mietverhältnis eine
+  formell ordnungsgemäße Abrechnung mit vollständigem Rechenweg. Lokal im Browser, ohne
+  Registrierung. Wie das fertige Dokument aussieht:
+  <a href="nebenkostenabrechnung-muster.html">Muster mit echten Zahlen</a>.</p>
+  <a class="cta" href="index.html">Heizkostenabrechnung kostenlos erstellen →</a>
+
+  <p class="meta">Redaktionelle Zusammenfassung, keine Rechtsberatung.</p>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Nebenkostenabrechnung</span>
+    <a href="index.html">Rechner</a>
+    <a href="pro.html">Pro-Version</a>
+    <a href="nebenkostenabrechnung-erstellen.html">Abrechnung erstellen</a>
+    <a href="nebenkostenabrechnung-muster.html">Muster</a>
+    <a href="co2-kosten-vermieter-rechner.html">CO2-Kosten</a>
+    <a href="impressum.html">Impressum</a>
+    <a href="datenschutz.html">Datenschutz</a>
+  </div>
+</footer>
+<script data-goatcounter="https://ayyoubaha.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+</body>
+</html>
