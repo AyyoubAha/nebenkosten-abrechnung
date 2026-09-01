@@ -52,6 +52,10 @@ table.rows th{text-align:left;font-size:.72rem;text-transform:uppercase;letter-s
 table.rows td{padding:3px 5px;vertical-align:middle}
 table.rows input,table.rows select{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:6px 8px}
 .rowdel{background:none;border:0;color:var(--err);font-size:1.05rem;cursor:pointer;padding:4px}
+tr.kvsub td{background:var(--bg);border-radius:8px}
+.kvgrid{display:flex;gap:8px 14px;flex-wrap:wrap;align-items:center;padding:6px 8px}
+.kvgrid label{display:flex;gap:6px;align-items:center;font-size:.82rem;color:var(--ink-soft)}
+.kvgrid input{width:90px;font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:7px;padding:5px 8px}
 .addrow{background:var(--surface);border:1px dashed var(--accent);color:var(--accent);font:inherit;font-weight:600;border-radius:8px;padding:7px 14px;cursor:pointer;margin:8px 0 6px;font-size:.86rem}
 .tablewrap{overflow-x:auto}
 .check{display:flex;gap:8px;align-items:center;font-size:.9rem;margin:4px 0 8px}
@@ -166,6 +170,16 @@ footer .wrap{display:flex;gap:16px;flex-wrap:wrap}
       <legend>5 · Heizung & Warmwasser (zentrale Anlage)</legend>
       <div class="check"><input type="checkbox" id="heiz_aktiv" checked><label for="heiz_aktiv">Gebäude hat eine zentrale Heizungs-/Warmwasseranlage</label></div>
       <div id="heizblock">
+      <div class="check"><input type="checkbox" id="bs_aktiv"><label for="bs_aktiv">Brennstoff mit Lagerbestand (Heizöl, Pellets, Flüssiggas) — Kosten nach Verbrauch abgrenzen</label></div>
+      <div class="grid" id="bsblock" style="display:none">
+        <div class="f c3"><label>Restbestand zu Beginn €</label><input id="bs_anfang" inputmode="decimal"></div>
+        <div class="f c3"><label>Käufe im Zeitraum €</label><input id="bs_kauf" inputmode="decimal"></div>
+        <div class="f c3"><label>Restbestand am Ende €</label><input id="bs_ende" inputmode="decimal"></div>
+        <div class="f c3"><label>Heiznebenkosten € <span class="hint">(Wartung, Strom …)</span></label><input id="bs_neben" inputmode="decimal"></div>
+        <div class="c12 hint" style="margin-top:-4px">Leistungsprinzip: Nur der im Zeitraum <em>verbrauchte</em> Brennstoff ist umlagefähig
+        (Restbestand zu Beginn + Käufe − Restbestand am Ende). Brennstoff + Heiznebenkosten ergeben automatisch
+        die „Heiz-/WW-Kosten gesamt".</div>
+      </div>
       <div class="grid">
         <div class="f c3"><label>Heiz-/WW-Kosten gesamt €</label><input id="h_kosten" inputmode="decimal"></div>
         <div class="f c3"><label>Energiemenge kWh</label><input id="h_kwh" inputmode="decimal"></div>
@@ -320,13 +334,48 @@ function addKosten(v = {}) {
       <option value="flaeche">Wohnfläche</option>
       <option value="einheiten">Einheiten</option>
       <option value="personen">Personen(-tage)</option>
+      <option value="verbrauch">Verbrauch (Zähler)</option>
     </select></td>
     <td><button type="button" class="rowdel">✕</button></td>`;
   tr.querySelector('.k_art').value = v.art || '';
   tr.querySelector('.k_betrag').value = v.betrag ?? '';
   tr.querySelector('.k_schluessel').value = v.schluessel || 'flaeche';
-  tr.querySelector('.rowdel').onclick = () => tr.remove();
+  tr._verbrauchInit = v.verbrauch || null;
+  tr.querySelector('.k_schluessel').addEventListener('change', syncKaltVerbrauch);
+  tr.querySelector('.k_art').addEventListener('input', syncKaltVerbrauch);
+  tr.querySelector('.rowdel').onclick = () => { const s = tr._sub; tr.remove(); if (s) s.remove(); };
   tb('t_kosten').append(tr);
+  syncKaltVerbrauch();
+}
+// Unterzeile mit Zählerständen je Mietverhältnis (+ Einheiten ohne Mietverhältnis),
+// nur für Kostenarten mit Schlüssel „Verbrauch". Gemessener Verbrauch ist nutzerscharf,
+// daher ohne zusätzliche Zeitanteile.
+function syncKaltVerbrauch() {
+  const parteien = [];
+  [...tb('t_mieter').querySelectorAll('tr')].forEach((mtr, i) => {
+    parteien.push({ key: `MV${i}`, label: `${mtr.querySelector('.m_einheit').value || '?'} · ${mtr.querySelector('.m_name').value || `Mieter ${i + 1}`}` });
+  });
+  const belegte = new Set([...tb('t_mieter').querySelectorAll('.m_einheit')].map((s) => s.value));
+  for (const n of einheitenNamen()) if (!belegte.has(n)) parteien.push({ key: n, label: `${n} · ohne Mietverhältnis` });
+
+  for (const tr of [...tb('t_kosten').children]) {
+    if (!tr.querySelector('.k_schluessel')) continue;
+    const alt = {};
+    if (tr._sub) { for (const inp of tr._sub.querySelectorAll('.kv_in')) alt[inp.dataset.key] = inp.value; tr._sub.remove(); tr._sub = null; }
+    if (tr.querySelector('.k_schluessel').value !== 'verbrauch') continue;
+    const init = tr._verbrauchInit || {};
+    const sub = document.createElement('tr');
+    sub.className = 'kvsub';
+    sub.innerHTML = `<td colspan="4"><div class="kvgrid">
+      <span class="hint">Zählerstände/Verbrauch „${escT(tr.querySelector('.k_art').value || 'Kostenart')}" je Partei:</span>
+      ${parteien.map((p) => `<label>${escT(p.label)} <input class="kv_in" inputmode="decimal" data-key="${escT(p.key)}"></label>`).join('')}
+    </div></td>`;
+    for (const inp of sub.querySelectorAll('.kv_in')) {
+      inp.value = alt[inp.dataset.key] ?? (init[inp.dataset.key] ?? '');
+    }
+    tr.after(sub);
+    tr._sub = sub;
+  }
 }
 function syncVerbrauch() {
   const body = tb('t_verbrauch');
@@ -361,6 +410,7 @@ function syncVerbrauch() {
     if (alt[n]) { tr.querySelector('.vb_h').value = alt[n].h; tr.querySelector('.vb_w').value = alt[n].w; }
     body.append(tr);
   }
+  syncKaltVerbrauch();
 }
 
 // ---------- Zustand lesen/schreiben ----------
@@ -379,11 +429,20 @@ function readState() {
     vorauszahlungen: num(tr.querySelector('.m_voraus').value),
     grundkostenMethode: tr.querySelector('.m_methode').value,
   }));
-  const kosten = [...tb('t_kosten').querySelectorAll('tr')].map((tr) => ({
-    art: tr.querySelector('.k_art').value.trim(),
-    betrag: num(tr.querySelector('.k_betrag').value),
-    schluessel: tr.querySelector('.k_schluessel').value,
-  })).filter((k) => k.art && k.betrag);
+  const kosten = [...tb('t_kosten').querySelectorAll('tr')]
+    .filter((tr) => tr.querySelector('.k_art'))
+    .map((tr) => {
+      const k = {
+        art: tr.querySelector('.k_art').value.trim(),
+        betrag: num(tr.querySelector('.k_betrag').value),
+        schluessel: tr.querySelector('.k_schluessel').value,
+      };
+      if (k.schluessel === 'verbrauch' && tr._sub) {
+        k.verbrauch = {};
+        for (const inp of tr._sub.querySelectorAll('.kv_in')) k.verbrauch[inp.dataset.key] = num(inp.value);
+      }
+      return k;
+    }).filter((k) => k.art && k.betrag);
   const verbrauchH = {}, verbrauchW = {};
   for (const tr of tb('t_verbrauch').querySelectorAll('tr')) {
     verbrauchH[tr.dataset.key] = num(tr.querySelector('.vb_h').value);
@@ -396,6 +455,10 @@ function readState() {
     einheiten, mieter, kosten,
     heizung: $('heiz_aktiv').checked ? {
       kosten: num($('h_kosten').value), kwh: num($('h_kwh').value), va: num($('h_va').value) || 70,
+      bs: $('bs_aktiv').checked ? {
+        anfang: num($('bs_anfang').value), kauf: num($('bs_kauf').value),
+        ende: num($('bs_ende').value), neben: num($('bs_neben').value),
+      } : null,
       co2kg: num($('h_co2kg').value), co2eur: num($('h_co2eur').value), co2aus: PRO ? $('h_co2aus').value : 'keine',
       wwMethode: $('h_wwmethode').value, wwKorr: $('h_wwkorr').value,
       wwM3: num($('h_wwm3').value), wwTemp: num($('h_wwtemp').value) || 60, wwKwh: num($('h_wwkwh').value),
@@ -421,6 +484,11 @@ function writeStateInner(s) {
   tb('t_kosten').innerHTML = ''; (s.kosten || []).forEach(addKosten);
   if (s.heizung) {
     $('heiz_aktiv').checked = true;
+    $('bs_aktiv').checked = !!s.heizung.bs;
+    $('bs_anfang').value = s.heizung.bs?.anfang || '';
+    $('bs_kauf').value = s.heizung.bs?.kauf || '';
+    $('bs_ende').value = s.heizung.bs?.ende || '';
+    $('bs_neben').value = s.heizung.bs?.neben || '';
     $('h_kosten').value = s.heizung.kosten || '';
     $('h_kwh').value = s.heizung.kwh || '';
     $('h_va').value = s.heizung.va || 70;
@@ -440,7 +508,7 @@ function writeStateInner(s) {
   } else if (s.heizung === null) {
     $('heiz_aktiv').checked = false;
   }
-  toggleHeiz(); toggleWW();
+  toggleHeiz(); toggleWW(); bsRechnen();
 }
 
 const STORE = 'nk-abrechnung-v1';
@@ -466,7 +534,7 @@ function buildEngineInput(s) {
     gebaeude: { wohnflaeche: s.gebaeudeFlaeche || flaecheSum },
     einheiten: s.einheiten.map((e) => ({ id: e.name, flaeche: e.flaeche })),
     mietverhaeltnisse: s.mieter.map((m) => ({ ...m })),
-    kalteKosten: s.kosten.map((k) => ({ art: k.art, betrag: k.betrag, schluessel: k.schluessel })),
+    kalteKosten: s.kosten.map((k) => ({ art: k.art, betrag: k.betrag, schluessel: k.schluessel, verbrauch: k.verbrauch })),
   };
   if (s.heizung) {
     input.heizung = {
@@ -565,6 +633,20 @@ function showPro(grund) {
   $('probox').scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 function toggleHeiz() { $('heizblock').style.display = $('heiz_aktiv').checked ? '' : 'none'; }
+// Brennstoff-Abgrenzung (Leistungsprinzip): h_kosten = Anfang + Käufe − Ende + Nebenkosten
+function bsRechnen() {
+  const aktiv = $('bs_aktiv').checked;
+  $('bsblock').style.display = aktiv ? '' : 'none';
+  $('h_kosten').readOnly = aktiv;
+  $('h_kosten').style.opacity = aktiv ? '.65' : '';
+  if (!aktiv) return;
+  const brennstoff = num($('bs_anfang').value) + num($('bs_kauf').value) - num($('bs_ende').value);
+  if (brennstoff < 0) {
+    $('warnbox').innerHTML = '<strong>Brennstoff-Abgrenzung ergibt einen negativen Verbrauch — Bestände/Käufe prüfen.</strong>';
+    $('warnbox').classList.add('show');
+  }
+  $('h_kosten').value = (Math.round((Math.max(0, brennstoff) + num($('bs_neben').value)) * 100) / 100) || '';
+}
 function toggleWW() {
   const m = $('h_wwmethode').value;
   $('f_wwm3').style.display = m === 'formel' ? '' : 'none';
@@ -574,6 +656,8 @@ function toggleWW() {
 }
 $('heiz_aktiv').onchange = toggleHeiz;
 $('h_wwmethode').onchange = toggleWW;
+$('bs_aktiv').onchange = bsRechnen;
+for (const id of ['bs_anfang', 'bs_kauf', 'bs_ende', 'bs_neben']) $(id).addEventListener('input', bsRechnen);
 document.querySelectorAll('[data-add]').forEach((b) => b.onclick = () => {
   ({ einheit: addEinheit, mieter: addMieter, kosten: addKosten })[b.dataset.add]();
 });
@@ -614,7 +698,7 @@ if (!load()) {
   $('z_bis').value = `${jahr}-12-31`;
   addEinheit(); addMieter(); addKosten({ art: 'Grundsteuer' });
 }
-toggleHeiz(); toggleWW();
+toggleHeiz(); toggleWW(); bsRechnen();
 </script>
 </body>
 </html>

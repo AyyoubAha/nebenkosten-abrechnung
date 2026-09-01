@@ -37,7 +37,13 @@ const base = `http://127.0.0.1:${server.address().port}`;
 const browser = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium', args: ['--no-sandbox'] });
 const page = await browser.newPage({ viewport: { width: 1200, height: 950 } });
 page.on('pageerror', (e) => { console.error('PAGEERROR:', e.message); process.exitCode = 1; });
-page.on('console', (m) => { if (m.type() === 'error') { console.error('CONSOLE:', m.text()); process.exitCode = 1; } });
+page.on('console', (m) => {
+  // Externes Statistik-Skript (gc.zgo.at) darf in der Testumgebung fehlschlagen — alles andere ist ein Fehler.
+  if (m.type() === 'error' && !/gc\.zgo\.at|goatcounter/.test(m.location()?.url || '')) {
+    console.error('CONSOLE:', m.text(), m.location()?.url || '');
+    process.exitCode = 1;
+  }
+});
 
 let failures = 0;
 const check = (cond, label) => { console.log((cond ? '✓ ' : '✗ ') + label); if (!cond) failures++; };
@@ -96,6 +102,17 @@ check(frei.includes('400 / 1000'), 'Frei: Verteilungsmaßstab 400/1000 inkl. unv
 check(frei.includes('20,1 kg CO2/m²·a') && frei.includes('57,89'), 'Frei: CO2-Block vollständig');
 check(norm(await page.textContent('#t_verbrauch')).includes('ohne Mietverhältnis'), 'Frei: Leerstands-Zeilen in Verbrauchstabelle');
 
+// Kalte Kosten nach Verbrauch (Zähler): Unterzeile mit Zählerständen je Partei
+await seed({ ...kontrollBasis,
+  mieter: [{ einheit: 'A', mieter: 'Mieter A', vorauszahlungen: 0 }],
+  kosten: [{ art: 'Wasser', betrag: 600, schluessel: 'verbrauch', verbrauch: { MV0: 30, B: 20, C: 10 } }],
+  heizung: null,
+});
+await page.waitForSelector('#ergebnis.show');
+check((await page.locator('tr.kvsub .kv_in').count()) === 3, 'Frei: Zähler-Unterzeile mit 3 Partei-Feldern');
+const wasser = await cardText(0);
+check(wasser.includes('300,00 €') && wasser.includes('30 / 60'), 'Frei: Wasser nach Zähler 600 × 30/60 = 300,00 €');
+
 // Persistenz über Reload
 await page.reload({ waitUntil: 'networkidle' });
 await page.waitForFunction(() => typeof window.__nkLoad === 'function');
@@ -114,10 +131,22 @@ if (!existsSync(proFile)) {
 await page.goto('file://' + proFile, { waitUntil: 'load' });
 await page.waitForFunction(() => typeof window.__nkLoad === 'function');
 check((await page.title()).includes('Pro'), 'Pro: Datei lädt per Doppelklick (file://), Titel gesetzt');
-check(norm(await page.textContent('header')).includes('Pro · v1.0'), 'Pro: Versions-Badge');
+check(norm(await page.textContent('header')).includes('Pro · v1.1'), 'Pro: Versions-Badge');
 check(await page.locator('#export').isVisible() && await page.locator('#drucken_alle').isVisible(),
   'Pro: Export & Sammeldruck sichtbar');
 check(!(await page.locator('#h_co2aus').isDisabled()), 'Pro: CO2-Ausnahme § 9 wählbar');
+
+// Brennstoff-Abgrenzung (Leistungsprinzip): 500 + 2000 − 300 + 163,50 = 2.363,50
+await page.check('#bs_aktiv');
+check(await page.locator('#bsblock').isVisible(), 'Pro: Abgrenzungs-Block erscheint');
+await page.fill('#bs_anfang', '500');
+await page.fill('#bs_kauf', '2000');
+await page.fill('#bs_ende', '300');
+await page.fill('#bs_neben', '163,50');
+check(await page.inputValue('#h_kosten') === '2363.5', 'Pro: Leistungsprinzip rechnet 2.363,50 € in Gesamtkosten');
+check(await page.locator('#h_kosten').evaluate((el) => el.readOnly), 'Pro: Gesamtfeld bei aktiver Abgrenzung schreibgeschützt');
+await page.uncheck('#bs_aktiv');
+check(!(await page.locator('#h_kosten').evaluate((el) => el.readOnly)), 'Pro: Gesamtfeld wieder frei nach Deaktivierung');
 
 // Volles Kontrollbeispiel (3 Mietverhältnisse)
 await seed({ ...kontrollBasis,

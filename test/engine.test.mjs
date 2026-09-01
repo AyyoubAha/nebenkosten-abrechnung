@@ -123,6 +123,24 @@ test('Einheiten ohne Mietverhältnis: Verbrauch (Einheiten-ID) bleibt im Maßsta
   assert.equal(r.proMietverhaeltnis.length, 1);
 });
 
+test('Kalte Kosten nach Verbrauch (Zähler): Anteil eigener/Gesamt, Leerstand verdünnt', () => {
+  const input = {
+    zeitraum: { von: '2026-01-01', bis: '2026-12-31' },
+    gebaeude: { wohnflaeche: 240 },
+    einheiten: [{ id: 'A', flaeche: 80 }, { id: 'B', flaeche: 80 }, { id: 'C', flaeche: 80 }],
+    kalteKosten: [{ art: 'Wasser', betrag: 600, schluessel: 'verbrauch', verbrauch: { A: 30, B: 20, C: 10 } }],
+    mietverhaeltnisse: [
+      { mieter: 'X', einheit: 'A', vorauszahlungen: 0 },
+      { mieter: 'Y', einheit: 'B', vorauszahlungen: 0 },
+      // C ist Leerstand: sein Verbrauch (10) bleibt im Nenner, der Anteil beim Vermieter
+    ],
+  };
+  const r = berechneAbrechnung(input);
+  assert.equal(r.proMietverhaeltnis[0].posten[0].betrag, 300); // 600 × 30/60
+  assert.equal(r.proMietverhaeltnis[1].posten[0].betrag, 200); // 600 × 20/60
+  assert.equal(r.proMietverhaeltnis[0].posten[0].anteilText, '30 / 60');
+});
+
 test('Warnung bei Verbrauchsanteil außerhalb 50–70 %', () => {
   const input = { ...basis, heizung: { ...basis.heizung, verbrauchsanteil: 80 }, mietverhaeltnisse: [{ mieter: 'A', einheit: 'A' }] };
   const r = berechneAbrechnung(input);
