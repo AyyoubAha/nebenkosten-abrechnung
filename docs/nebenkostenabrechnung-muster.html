@@ -3,76 +3,57 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nebenkostenabrechnung: Muster mit echten Zahlen (2026) – alle Pflichtangaben erklärt</title>
-<meta name="description" content="Vollständiges Muster einer Nebenkostenabrechnung mit Heizkosten und CO2-Aufteilung: alle BGH-Pflichtangaben am durchgerechneten Beispiel erklärt — statt Blanko-Vorlage direkt im kostenlosen Rechner ausfüllen.">
+<title>Nebenkostenabrechnung: Muster mit echten Zahlen und allen Pflichtangaben (2026)</title>
+<meta name="description" content="Vollständiges Muster einer Nebenkostenabrechnung mit Heizkosten und CO2-Aufteilung. Alle Pflichtangaben des BGH am durchgerechneten Beispiel erklärt. Statt Blanko-Vorlage direkt im kostenlosen Rechner ausfüllen.">
 <meta name="robots" content="index,follow">
 <link rel="canonical" href="https://ayyoubaha.github.io/nebenkosten-abrechnung/nebenkostenabrechnung-muster.html">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230f766e'/%3E%3Ctext x='16' y='22' font-family='system-ui' font-size='15' font-weight='700' fill='%23fff' text-anchor='middle'%3ENK%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%231f5c48'/%3E%3Ctext x='16' y='22' font-family='system-ui' font-size='15' font-weight='700' fill='%23fff' text-anchor='middle'%3ENK%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="stil.css">
 <style>
-:root{--bg:#f6f7f9;--surface:#fff;--ink:#1a2332;--ink-soft:#5a6577;--line:#e3e7ee;--accent:#0f766e;--accent-ink:#fff;--warnbg:#fdf3e3;--warn:#7a5a1d;--err:#a03030}
-@media (prefers-color-scheme: dark){:root{--bg:#12161d;--surface:#1a2029;--ink:#e8ecf2;--ink-soft:#9aa5b5;--line:#2b3442;--accent:#2dd4bf;--accent-ink:#0e1420;--warnbg:#2e2617;--warn:#e0c070;--err:#e08a8a}}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-.wrap{max-width:820px;margin:0 auto;padding:0 20px}
-header.top{padding:13px 0;border-bottom:1px solid var(--line);background:var(--surface)}
-.top .wrap{display:flex;align-items:center;gap:12px;flex-wrap:wrap;max-width:900px}
-.logo{font-weight:700;font-size:1.05rem}.logo a{color:inherit;text-decoration:none}.logo span{color:var(--accent)}
-main{padding:30px 0 50px}
-h1{font-size:clamp(1.35rem,3.2vw,1.75rem);line-height:1.25;margin:0 0 10px}
-h2{font-size:1.15rem;margin:30px 0 8px}
-p{margin:10px 0}
-.meta{color:var(--ink-soft);font-size:.85rem;margin-bottom:16px}
-.muster{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:26px 30px;margin:18px 0;box-shadow:0 1px 4px rgba(10,20,40,.05)}
-.muster h3{margin:0 0 2px;font-size:1.1rem}
-.muster .kopf{color:var(--ink-soft);font-size:.85rem;margin-bottom:12px}
-.muster table{width:100%;border-collapse:collapse;font-size:.86rem;margin:10px 0 4px}
-.muster th{text-align:left;font-size:.72rem;text-transform:uppercase;letter-spacing:.4px;color:var(--ink-soft);border-bottom:2px solid var(--line);padding:6px 6px}
-.muster td{border-bottom:1px solid var(--line);padding:7px 6px;vertical-align:top}
-.muster td.r,.muster th.r{text-align:right;white-space:nowrap}
+.wrap{max-width:840px}
+.muster{background:var(--blatt);border:1px solid var(--linie);padding:26px 30px;margin:18px 0}
+.muster h3{margin:0 0 4px;font-size:1.08rem}
+.muster .kopf{color:var(--grau);font-size:.85rem;margin-bottom:12px;padding-bottom:10px;border-bottom:3px double var(--tinte)}
+.muster table{font-size:.86rem;margin:10px 0 4px}
 .saldozeile{display:flex;justify-content:flex-end;gap:26px;font-size:.95rem;margin-top:10px;flex-wrap:wrap}
-.saldozeile b.nach{color:var(--err)}
-.co2block{margin-top:14px;padding:11px 14px;background:var(--bg);border-radius:9px;font-size:.82rem;color:var(--ink-soft)}
-.fussnote{margin-top:12px;font-size:.75rem;color:var(--ink-soft)}
-.mark{display:inline-block;background:var(--accent);color:var(--accent-ink);font-size:.7rem;font-weight:700;border-radius:99px;padding:1px 8px;vertical-align:middle;margin-left:6px}
-.legende{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 20px;margin:16px 0}
+.saldozeile b.nach{color:var(--rot)}
+.co2block{margin-top:14px;padding-top:10px;border-top:1px solid var(--linie);font-size:.82rem;color:var(--grau)}
+.fussnote{margin-top:12px;font-size:.75rem;color:var(--grau)}
+.mark{display:inline-block;background:var(--gruen);color:var(--auf-gruen);font-size:.7rem;font-weight:700;padding:1px 7px;vertical-align:middle;margin-left:6px;font-family:var(--mono)}
 .legende ol{margin:10px 0;padding-left:22px}
 .legende li{margin:8px 0}
-.hinweis{background:var(--warnbg);color:var(--warn);border-radius:8px;padding:11px 14px;margin:14px 0;font-size:.92rem}
-.cta{display:inline-block;background:var(--accent);color:var(--accent-ink);font-weight:700;border-radius:10px;padding:12px 24px;text-decoration:none;margin:8px 0}
-.tablewrap{overflow-x:auto}
-a{color:var(--accent)}
-footer{border-top:1px solid var(--line);margin-top:40px;padding:18px 0 30px;color:var(--ink-soft);font-size:.84rem}
-footer .wrap{display:flex;gap:16px;flex-wrap:wrap;max-width:900px}
 </style>
 </head>
 <body>
 <header class="top">
   <div class="wrap">
-    <div class="logo"><a href="index.html">Nebenkosten<span>abrechnung</span></a></div>
+    <a class="marke" href="index.html">Nebenkostenabrechnung</a>
   </div>
 </header>
 
 <main class="wrap">
-  <h1>Nebenkostenabrechnung-Muster mit echten Zahlen — und warum eine Blanko-Vorlage nicht reicht</h1>
-  <p class="meta">Stand: September 2026 · Beispiel vollständig durchgerechnet (HeizkostenV + CO2KostAufG)</p>
+  <h1>Nebenkostenabrechnung als Muster mit echten Zahlen</h1>
+  <p class="meta">Stand September 2026. Beispiel vollständig durchgerechnet nach HeizkostenV und CO2KostAufG.</p>
 
-  <p>Die meisten „Muster" im Netz sind leere Tabellen. Das Problem: Formfehler entstehen nicht beim
-  Ausfüllen der Tabelle, sondern <strong>bei der Rechnung dahinter</strong> — Heizkosten-Split,
-  CO2-Aufteilung, taggenaue Anteile. Deshalb zeigen wir ein Muster <strong>mit echten Zahlen</strong>
-  und erklären jede Pflichtangabe. Wer es eilig hat: Der
-  <a href="index.html">kostenlose Rechner</a> erzeugt genau dieses Dokument aus Ihren eigenen Daten.</p>
+  <p>Die meisten Muster im Netz sind leere Tabellen. Das Problem: Formfehler entstehen selten
+  beim Ausfüllen der Tabelle, sondern bei der Rechnung dahinter, also beim Heizkosten-Split,
+  der CO2-Aufteilung und den taggenauen Anteilen. Deshalb zeigt diese Seite ein Muster mit
+  echten Zahlen und erklärt jede Pflichtangabe. Wer es eilig hat:
+  <a href="index.html">Der kostenlose Rechner</a> erzeugt genau dieses Dokument aus Ihren
+  eigenen Daten.</p>
 
-  <h2>Das Muster: Wohnung A (80 m²) in einem Haus mit 240 m², Erdgas-Zentralheizung</h2>
+  <h2>Das Muster: Wohnung A (80 m²) in einem Haus mit 240 m² und Gaszentralheizung</h2>
 
   <div class="muster">
-    <h3>Betriebs- und Heizkostenabrechnung <span class="mark">①</span></h3>
+    <h3>Betriebs- und Heizkostenabrechnung <span class="mark">1</span></h3>
     <div class="kopf">
-      Max Vermieter · Vermieterweg 2, 12345 Musterstadt<br>
-      Objekt: Musterstraße 1, 12345 Musterstadt · Einheit: <b>Wohnung A</b> · Mieter: <b>Erika Mieterin</b><br>
-      Abrechnungszeitraum: 01.01.2026 – 31.12.2026 · Nutzungszeitraum: 01.01.2026 – 31.12.2026 <span class="mark">②</span>
+      Max Vermieter, Vermieterweg 2, 12345 Musterstadt<br>
+      Objekt: Musterstraße 1, 12345 Musterstadt<br>
+      Einheit: <b>Wohnung A</b>, Mieter: <b>Erika Mieterin</b><br>
+      Abrechnungszeitraum: 01.01.2026 bis 31.12.2026, Nutzungszeitraum: 01.01.2026 bis 31.12.2026 <span class="mark">2</span>
     </div>
     <div class="tablewrap"><table>
-      <thead><tr><th>Kostenart</th><th class="r">Gesamtkosten ③</th><th>Umlageschlüssel ④</th><th>Ihr Anteil (Berechnung) ⑤</th><th class="r">Betrag</th></tr></thead>
+      <thead><tr><th>Kostenart</th><th class="r">Gesamtkosten 3</th><th>Umlageschlüssel 4</th><th>Anteil (Berechnung) 5</th><th class="r">Betrag</th></tr></thead>
       <tbody>
         <tr><td>Grundsteuer</td><td class="r">600,00 €</td><td>Wohnfläche</td><td>80 / 240 m²</td><td class="r">200,00 €</td></tr>
         <tr><td>Wasser/Abwasser</td><td class="r">600,00 €</td><td>Verbrauch (Zähler)</td><td>30 / 60 m³</td><td class="r">300,00 €</td></tr>
@@ -82,48 +63,51 @@ footer .wrap{display:flex;gap:16px;flex-wrap:wrap;max-width:900px}
         <tr><td>Warmwasser Verbrauchskosten</td><td class="r">643,59 €</td><td>Verbrauch (m³)</td><td>20 / 60</td><td class="r">214,53 €</td></tr>
       </tbody>
     </table></div>
-    <div class="saldozeile"><span>Summe Ihrer Anteile: <b>1.575,10 €</b></span>
-      <span>Vorauszahlungen: <b>−1.440,00 €</b> ⑥</span>
+    <div class="saldozeile"><span>Summe der Anteile: <b>1.575,10 €</b></span>
+      <span>Vorauszahlungen: <b>−1.440,00 €</b> <span class="mark">6</span></span>
       <span>Nachzahlung: <b class="nach">135,10 €</b></span></div>
     <div class="co2block"><b>CO2-Kostenaufteilung (CO2KostAufG):</b> Einstufung des Gebäudes:
-      20,1 kg CO2/m²·a → Vermieteranteil 20 % (57,89 € von 289,44 € CO2-Kosten, bereits von den
-      umgelegten Heizkosten abgezogen). Auf die Mieter entfallen 231,55 €. <span class="mark">⑦</span></div>
-    <div class="fussnote">Einwendungen gegen diese Abrechnung sind innerhalb von 12 Monaten nach Zugang
-      mitzuteilen (§ 556 Abs. 3 BGB). Belegeinsicht nach Vereinbarung.</div>
+      20,1 kg CO2 je m² Wohnfläche und Jahr, daraus Vermieteranteil 20 % (57,89 € von 289,44 €
+      CO2-Kosten, bereits von den umgelegten Heizkosten abgezogen). Auf die Mieter entfallen
+      231,55 €. <span class="mark">7</span></div>
+    <div class="fussnote">Einwendungen gegen diese Abrechnung sind innerhalb von 12 Monaten nach
+      Zugang mitzuteilen (§ 556 Abs. 3 BGB). Belegeinsicht nach Vereinbarung.</div>
   </div>
 
   <h2>Die Pflichtangaben im Einzelnen</h2>
   <div class="legende"><ol>
-    <li><strong>① Absender, Objekt, Mieter, Einheit</strong> — die Abrechnung muss dem konkreten
+    <li><strong>Absender, Objekt, Mieter, Einheit.</strong> Die Abrechnung muss dem konkreten
       Mietverhältnis zuzuordnen sein.</li>
-    <li><strong>② Abrechnungs- und Nutzungszeitraum</strong> — maximal 12 Monate; bei Ein-/Auszug
-      weicht der Nutzungszeitraum ab (<a href="nebenkostenabrechnung-mieterwechsel.html">Mieterwechsel</a>).</li>
-    <li><strong>③ Gesamtkosten je Kostenart</strong> — die BGH-Grundanforderung: Der Mieter muss
-      sehen, welcher Gesamtbetrag verteilt wurde (BGH VIII ZR 298/80).</li>
-    <li><strong>④ Umlageschlüssel</strong> — angegeben und nachvollziehbar; ohne Vereinbarung gilt
+    <li><strong>Abrechnungs- und Nutzungszeitraum.</strong> Höchstens zwölf Monate; bei Ein-
+      oder Auszug weicht der Nutzungszeitraum ab
+      (<a href="nebenkostenabrechnung-mieterwechsel.html">Mieterwechsel</a>).</li>
+    <li><strong>Gesamtkosten je Kostenart.</strong> Die Grundanforderung des BGH: Der Mieter
+      muss sehen, welcher Gesamtbetrag verteilt wurde (BGH VIII ZR 298/80).</li>
+    <li><strong>Umlageschlüssel.</strong> Angegeben und nachvollziehbar; ohne Vereinbarung gilt
       die Wohnfläche (§ 556a BGB), Heizkosten folgen zwingend der Heizkostenverordnung.</li>
-    <li><strong>⑤ Berechnung des Anteils</strong> — der Rechenweg (z. B. „80 / 240 m²") macht die
+    <li><strong>Berechnung des Anteils.</strong> Der Rechenweg, etwa „80 / 240 m²", macht die
       Abrechnung prüffähig. Fehlt er, ist sie formell angreifbar.</li>
-    <li><strong>⑥ Vorauszahlungen und Saldo</strong> — tatsächlich gezahlte Vorauszahlungen abziehen,
-      Ergebnis als Nachzahlung oder Guthaben ausweisen.</li>
-    <li><strong>⑦ CO2-Ausweis</strong> — seit 2023 Pflicht (§ 7 Abs. 3 CO2KostAufG): Einstufung,
-      Aufteilungsverhältnis und Beträge. Fehlt er, darf der Mieter 3 % kürzen. Rechenweg:
+    <li><strong>Vorauszahlungen und Saldo.</strong> Tatsächlich gezahlte Vorauszahlungen
+      abziehen, das Ergebnis als Nachzahlung oder Guthaben ausweisen.</li>
+    <li><strong>CO2-Ausweis.</strong> Seit 2023 Pflicht (§ 7 Abs. 3 CO2KostAufG): Einstufung,
+      Aufteilungsverhältnis und Beträge. Fehlt er, darf der Mieter 3 Prozent kürzen. Rechenweg:
       <a href="co2-kosten-vermieter-rechner.html">CO2-Kosten aufteilen</a>.</li>
   </ol></div>
 
-  <div class="hinweis"><strong>Woher kommen die Heizkosten-Zahlen im Muster?</strong> Aus 3.000 €
-  Heiz-/Warmwasserkosten wurden zuerst 57,89 € CO2-Vermieteranteil abgezogen, dann 919,41 € für
-  Warmwasser abgetrennt (§ 9 HeizkostenV, Formel 2,5 × 60 m³ × 50 K = 7.500 kWh von 24.000 kWh)
-  und beide Töpfe 30/70 in Grund- und Verbrauchskosten geteilt. Genau diese Kette rechnet der
-  Rechner automatisch — Details: <a href="heizkostenabrechnung-selbst-erstellen.html">Heizkostenabrechnung
-  selbst erstellen</a>.</div>
+  <div class="hinweis"><strong>Woher kommen die Heizkosten-Zahlen im Muster?</strong> Von den
+  3.000 Euro Heiz- und Warmwasserkosten wurden zuerst 57,89 Euro CO2-Vermieteranteil abgezogen,
+  dann 919,41 Euro für Warmwasser abgetrennt (§ 9 HeizkostenV, Formel 2,5 × 60 m³ × 50 K =
+  7.500 kWh von 24.000 kWh). Beide Töpfe wurden anschließend 30 zu 70 in Grund- und
+  Verbrauchskosten geteilt. Genau diese Kette rechnet der Rechner automatisch; die Schritte
+  erklärt der Ratgeber
+  <a href="heizkostenabrechnung-selbst-erstellen.html">Heizkostenabrechnung selbst erstellen</a>.</div>
 
-  <h2>Muster ausfüllen? Besser: ausrechnen lassen</h2>
-  <p>Dieses Muster können Sie nicht guten Gewissens abtippen — Ihre Zahlen sind andere. Der
-  kostenlose Rechner erstellt die identische, formell ordnungsgemäße Abrechnung aus Ihren Kosten
-  und Zählerständen, inklusive aller Rechenschritte. Komplett im Browser, ohne Registrierung,
+  <h2>Muster abtippen? Besser ausrechnen lassen</h2>
+  <p>Dieses Muster lässt sich nicht guten Gewissens übernehmen, denn Ihre Zahlen sind andere.
+  Der kostenlose Rechner erstellt die gleiche, formell ordnungsgemäße Abrechnung aus Ihren
+  Kosten und Zählerständen, mit allen Rechenschritten. Er läuft im Browser, ohne Registrierung;
   Ihre Daten bleiben auf Ihrem Gerät.</p>
-  <a class="cta" href="index.html">Eigene Abrechnung kostenlos erstellen →</a>
+  <a class="cta" href="index.html">Eigene Abrechnung kostenlos erstellen</a>
 
   <p class="meta">Alle Zahlen des Musters sind ein durchgerechnetes Beispiel. Redaktionelle
   Zusammenfassung, keine Rechtsberatung.</p>

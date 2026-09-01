@@ -84,7 +84,7 @@ check(await page.locator('#h_co2aus').isDisabled(), 'Frei: CO2-Ausnahme § 9 ges
 await page.click('[data-add="mieter"]');
 check(await page.locator('#probox.show').isVisible(), 'Frei: 2. Mietverhältnis öffnet Pro-Hinweis');
 check((await page.locator('#t_mieter tbody tr').count()) === 1, 'Frei: 2. Mietverhältnis wird nicht angelegt');
-check(norm(await page.textContent('#probox')).includes('39 €'), 'Pro-Hinweis nennt Preis 39 €');
+check(norm(await page.textContent('#probox')).includes('39 Euro'), 'Pro-Hinweis nennt Preis 39 Euro');
 await page.screenshot({ path: join(SHOTS, '1-frei-gate.png') });
 
 // Frei rechnet korrekt: 1 Mietverhältnis, Rest des Gebäudes als Leerstand/Selbstnutzung
@@ -99,7 +99,7 @@ check((await page.locator('.abrechnung').count()) === 1, 'Frei: genau eine Abrec
 const frei = await cardText(0);
 check(frei.includes('1.075,10 €'), 'Frei: Kontrollbeispiel-Summe 1.075,10 € (Leerstands-Verbrauch im Maßstab)');
 check(frei.includes('400 / 1000'), 'Frei: Verteilungsmaßstab 400/1000 inkl. unvermieteter Einheiten');
-check(frei.includes('20,1 kg CO2/m²·a') && frei.includes('57,89'), 'Frei: CO2-Block vollständig');
+check(frei.includes('20,1 kg CO2 je m² Wohnfläche und Jahr') && frei.includes('57,89'), 'Frei: CO2-Block vollständig');
 check(norm(await page.textContent('#t_verbrauch')).includes('ohne Mietverhältnis'), 'Frei: Leerstands-Zeilen in Verbrauchstabelle');
 
 // Kalte Kosten nach Verbrauch (Zähler): Unterzeile mit Zählerständen je Partei
@@ -131,7 +131,7 @@ if (!existsSync(proFile)) {
 await page.goto('file://' + proFile, { waitUntil: 'load' });
 await page.waitForFunction(() => typeof window.__nkLoad === 'function');
 check((await page.title()).includes('Pro'), 'Pro: Datei lädt per Doppelklick (file://), Titel gesetzt');
-check(norm(await page.textContent('header')).includes('Pro · v1.1'), 'Pro: Versions-Badge');
+check(norm(await page.textContent('header')).includes('Pro Version 1.2'), 'Pro: Versions-Badge');
 check(await page.locator('#export').isVisible() && await page.locator('#drucken_alle').isVisible(),
   'Pro: Export & Sammeldruck sichtbar');
 check(!(await page.locator('#h_co2aus').isDisabled()), 'Pro: CO2-Ausnahme § 9 wählbar');
@@ -163,7 +163,7 @@ const a = await cardText(0);
 check(a.includes('202,27') && a.includes('566,36') && a.includes('91,94') && a.includes('214,53'),
   'Pro: alle vier Heiz-/WW-Posten centgenau (202,27 / 566,36 / 91,94 / 214,53)');
 check(a.includes('1.075,10 €'), 'Pro: Einheit A Summe 1.075,10 €');
-check(a.includes('20,1 kg CO2/m²·a') && a.includes('Vermieteranteil 20 %') && a.includes('57,89'),
+check(a.includes('20,1 kg CO2 je m² Wohnfläche und Jahr') && a.includes('Vermieteranteil 20 %') && a.includes('57,89'),
   'Pro: CO2-Block Einstufung 20,1 → 20 %, 57,89 €');
 check(a.includes('§ 556') && a.includes('12 Monaten'), 'Pro: Einwendungsfrist § 556 BGB');
 check(a.includes('Umlageschlüssel') && a.includes('Gesamtkosten'), 'Pro: BGH-Pflichtspalten');
@@ -188,7 +188,7 @@ check((await page.locator('.abrechnung').count()) === 4, 'Pro Mieterwechsel: 4 A
 const m1 = await cardText(0), m2 = await cardText(1);
 check(m1.includes('646,21 €'), 'Pro: Mieter 1 (Jan–Jun) 646,21 €');
 check(m2.includes('428,89 €'), 'Pro: Mieter 2 (Jul–Dez) 428,89 €');
-check(m1.includes('01.01.2026 – 30.06.2026'), 'Pro: Nutzungszeitraum ausgewiesen');
+check(m1.includes('01.01.2026 bis 30.06.2026'), 'Pro: Nutzungszeitraum ausgewiesen');
 check(m1.includes('Gradtagszahlen'), 'Pro: GTZ-Methode im Schlüssel benannt');
 await page.screenshot({ path: join(SHOTS, '3-pro-mieterwechsel.png') });
 

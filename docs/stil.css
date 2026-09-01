@@ -1,0 +1,58 @@
+/* Nebenkostenabrechnung: Lesestil für Ratgeber, Kaufseite und Rechtsseiten.
+   Gestaltung "Abrechnungsbogen": warmes Papier, Flaschengrün, harte 1px-Linien,
+   Versal-Beschriftungen, Tabellenziffern. Systemschriften mit Absicht: Das
+   Produktversprechen (keine Requests an Dritte) verbietet Webfonts. */
+:root{
+  --papier:#f4f1ea; --blatt:#fdfcf8; --tinte:#26221a; --grau:#6d675a; --linie:#d8d2c2;
+  --gruen:#1f5c48; --gruen-dunkel:#174437; --auf-gruen:#f6f4ec;
+  --rot:#9c3423; --warn:#7c6017; --warn-flaeche:#f3ecd8;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --papier:#181712; --blatt:#201e17; --tinte:#e9e5d8; --grau:#a39d8c; --linie:#3c382b;
+    --gruen:#8ecbaf; --gruen-dunkel:#a7dcc3; --auf-gruen:#12211b;
+    --rot:#e09482; --warn:#d9bd6d; --warn-flaeche:#2c2716;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--papier);color:var(--tinte);
+  font:16px/1.6 "Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  font-variant-numeric:tabular-nums}
+.wrap{max-width:780px;margin:0 auto;padding:0 20px}
+a{color:var(--gruen);text-decoration:underline;text-underline-offset:2px}
+a:hover{color:var(--gruen-dunkel)}
+:focus-visible{outline:2px solid var(--gruen);outline-offset:1px}
+
+header.top{border-bottom:1px solid var(--tinte)}
+header.top .wrap{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;padding-top:16px;padding-bottom:12px;max-width:900px}
+.marke{font-weight:700;font-size:1.02rem;display:flex;align-items:center;gap:9px;color:var(--tinte);text-decoration:none}
+.marke::before{content:"";width:11px;height:11px;background:var(--gruen);display:inline-block}
+.modus{color:var(--grau);font-size:.84rem;margin-left:auto}
+
+main{padding:30px 0 50px}
+h1{font-size:clamp(1.35rem,3.2vw,1.8rem);line-height:1.22;margin:0 0 10px;letter-spacing:-.01em}
+h2{font-size:1.02rem;margin:34px 0 8px;text-transform:uppercase;letter-spacing:.08em;
+  border-bottom:1px solid var(--tinte);padding-bottom:6px}
+p{margin:10px 0}
+.meta{color:var(--grau);font-size:.85rem;margin-bottom:18px}
+
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th,td{padding:7px 10px;border-bottom:1px solid var(--linie);text-align:left;vertical-align:top}
+th{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--grau);border-bottom:1px solid var(--tinte);font-weight:600}
+td.r,th.r{text-align:right;white-space:nowrap}
+.tablewrap{overflow-x:auto;margin:12px 0}
+
+.beispiel{border-left:3px solid var(--gruen);padding:4px 0 4px 16px;margin:16px 0}
+.hinweis{border-left:3px solid var(--warn);background:var(--warn-flaeche);color:var(--warn);padding:10px 14px;margin:16px 0;font-size:.92rem}
+.cta{display:inline-block;background:var(--gruen);color:var(--auf-gruen);font-weight:600;padding:12px 24px;text-decoration:none;margin:10px 0}
+.cta:hover{background:var(--gruen-dunkel);color:var(--auf-gruen)}
+
+footer{border-top:1px solid var(--tinte);margin-top:44px;padding:18px 0 30px;color:var(--grau);font-size:.84rem}
+footer .wrap{display:flex;gap:8px 18px;flex-wrap:wrap;max-width:900px}
+footer a{color:var(--grau)}
+footer a:hover{color:var(--tinte)}
+
+@media (prefers-reduced-motion: no-preference){
+  a,.cta{transition:background-color .12s,color .12s}
+}

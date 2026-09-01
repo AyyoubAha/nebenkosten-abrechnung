@@ -3,7 +3,7 @@
  * Implementiert das „Minimal korrekte Rechenmodell" aus
  * research/2026-09-01-nebenkosten-rechtsregeln.md (dort alle Rechtsgrundlagen).
  *
- * Pure Funktionen, kein DOM — testbar in Node, nutzbar im Browser.
+ * Pure Funktionen, kein DOM. Testbar in Node, nutzbar im Browser.
  * Geld: intern ungerundet, Ausgabeblöcke centgenau gerundet (wie BGH-übliche Darstellung).
  */
 
@@ -125,7 +125,7 @@ export function berechneAbrechnung(input) {
         posten[m.idx].push({ bezeichnung: k.art, gesamt: k.betrag, schluessel: 'Verbrauch', anteilText: `${eigener} / ${summe}`, betrag: summe ? r2(k.betrag * eigener / summe) : 0 });
         continue;
       }
-      posten[m.idx].push({ bezeichnung: k.art, gesamt: k.betrag, schluessel: schluessel === 'flaeche' ? 'Wohnfläche' : 'Einheiten', anteilText: anteilText + (zeitFaktor < 1 ? ` · ${tage(m.von, m.bis)}/${zTage} Tage` : ''), betrag: r2(k.betrag * einheitenAnteil * zeitFaktor) });
+      posten[m.idx].push({ bezeichnung: k.art, gesamt: k.betrag, schluessel: schluessel === 'flaeche' ? 'Wohnfläche' : 'Einheiten', anteilText: anteilText + (zeitFaktor < 1 ? `, ${tage(m.von, m.bis)}/${zTage} Tage` : ''), betrag: r2(k.betrag * einheitenAnteil * zeitFaktor) });
     }
   }
 
@@ -133,7 +133,7 @@ export function berechneAbrechnung(input) {
   let gebaeudeInfo = { flaecheGesamt, zeitraum, zTage };
   if (heizung) {
     const va = heizung.verbrauchsanteil ?? 70;
-    if (va < 50 || va > 70) w.push(`Verbrauchsanteil ${va} % liegt außerhalb 50–70 % (§ 7 HeizkostenV) — nur mit besonderer Vereinbarung zulässig.`);
+    if (va < 50 || va > 70) w.push(`Verbrauchsanteil ${va} % liegt außerhalb 50–70 % (§ 7 HeizkostenV); nur mit besonderer Vereinbarung zulässig.`);
 
     // CO2-Split (vor Verteilung, Gebäudeebene)
     const co2 = heizung.co2 ? co2Split({ kg: heizung.co2.kg, kosten: heizung.co2.kosten, wohnflaeche: flaecheGesamt, ausnahme: heizung.co2.ausnahme, zeitraumTage: zTage }) : null;
@@ -173,7 +173,7 @@ export function berechneAbrechnung(input) {
     const wwSumme = Object.values(einheitWV).reduce((s, v) => s + v, 0);
 
     // ZWEI-STUFEN-RECHNUNG: erst Einheiten-Block (gerundet), dann Aufteilung innerhalb der
-    // Einheit (§ 9b) — hält Einheiten-Summen konsistent und entspricht der Abrechnungspraxis.
+    // Einheit (§ 9b): hält Einheiten-Summen konsistent und entspricht der Abrechnungspraxis.
     const blockJeEinheit = {};
     for (const e of einheiten) {
       const flAnteil = e.flaeche / flaecheGesamt;
@@ -202,7 +202,7 @@ export function berechneAbrechnung(input) {
         let gText = `${e.flaeche} / ${flaecheGesamt} m²`;
         if (teilzeit) {
           gFaktor = grundMethode === 'gtz' ? gtzAnteil(m.von, m.bis, zeitraum.von, zeitraum.bis) : tage(m.von, m.bis) / zTage;
-          gText += grundMethode === 'gtz' ? ` · GTZ ${(gFaktor * 1000).toFixed(0)} ‰` : ` · ${tage(m.von, m.bis)}/${zTage} Tage`;
+          gText += grundMethode === 'gtz' ? `, GTZ ${(gFaktor * 1000).toFixed(0)} ‰` : `, ${tage(m.von, m.bis)}/${zTage} Tage`;
         }
         const hg = letzter ? r2(rest.hg) : r2(block.heizGrund * gFaktor);
         rest.hg = r2(rest.hg - hg);
@@ -218,7 +218,7 @@ export function berechneAbrechnung(input) {
           const wwGFaktor = teilzeit ? tage(m.von, m.bis) / zTage : 1;
           const wg = letzter ? r2(rest.wg) : r2(block.wwGrund * wwGFaktor);
           rest.wg = r2(rest.wg - wg);
-          posten[m.idx].push({ bezeichnung: 'Warmwasser Grundkosten', gesamt: wwGrund, schluessel: 'Wohnfläche' + (teilzeit ? '/Zeitanteil' : ''), anteilText: `${e.flaeche} / ${flaecheGesamt} m²${teilzeit ? ` · ${tage(m.von, m.bis)}/${zTage} Tage` : ''}`, betrag: wg });
+          posten[m.idx].push({ bezeichnung: 'Warmwasser Grundkosten', gesamt: wwGrund, schluessel: 'Wohnfläche' + (teilzeit ? '/Zeitanteil' : ''), anteilText: `${e.flaeche} / ${flaecheGesamt} m²${teilzeit ? `, ${tage(m.von, m.bis)}/${zTage} Tage` : ''}`, betrag: wg });
           const wvW = wvVon(m);
           const wvEinheit = einheitWV[e.id] || 0;
           const wv2 = letzter ? r2(rest.wv) : (wvEinheit ? r2(block.wwVerbrauch * wvW / wvEinheit) : 0);
@@ -234,7 +234,7 @@ export function berechneAbrechnung(input) {
       heizung: { topfNachCO2: r2(topf), wwQuote: r2(wwQuote * 100), wwTopf, heizTopf, heizGrund, heizVerbrauch, wwGrund, wwVerbrauch, qWW: r2(qWW) },
     };
     if (co2 && co2.vermieterAnteil > 0) {
-      w.push(`CO2-Ausweis Pflicht (§ 7 Abs. 3 CO2KostAufG): Einstufung ${co2.spezifisch} kg CO2/m²·a, Vermieteranteil ${co2.vermieterProzent} % = ${co2.vermieterAnteil.toFixed(2)} € — in der Abrechnung ausweisen, sonst 3 %-Kürzungsrecht.`);
+      w.push(`CO2-Ausweis Pflicht (§ 7 Abs. 3 CO2KostAufG): Einstufung ${co2.spezifisch} kg CO2 je m² und Jahr, Vermieteranteil ${co2.vermieterProzent} % = ${co2.vermieterAnteil.toFixed(2)} €. In der Abrechnung ausweisen, sonst greift das Kürzungsrecht von 3 %.`);
     }
   }
 
