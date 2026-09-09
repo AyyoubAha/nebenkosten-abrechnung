@@ -29,6 +29,12 @@ keine Registrierung, keine Datenübertragung.
 - [Mieterwechsel: Heiz- und Nebenkosten aufteilen](https://ayyoubaha.github.io/nebenkosten-abrechnung/nebenkostenabrechnung-mieterwechsel.html)
 - [Leerstand und Selbstnutzung in der Abrechnung](https://ayyoubaha.github.io/nebenkosten-abrechnung/nebenkostenabrechnung-leerstand.html)
 - [Muster mit echten Zahlen](https://ayyoubaha.github.io/nebenkosten-abrechnung/nebenkostenabrechnung-muster.html)
+- [Grundsteuer auf Mieter umlegen (Reform 2025)](https://ayyoubaha.github.io/nebenkosten-abrechnung/grundsteuer-umlegen.html)
+- [Eigentumswohnung: vom Hausgeld zur Abrechnung](https://ayyoubaha.github.io/nebenkosten-abrechnung/nebenkostenabrechnung-eigentumswohnung.html)
+- [Vorauszahlung anpassen (§ 560 BGB)](https://ayyoubaha.github.io/nebenkosten-abrechnung/nebenkostenvorauszahlung-anpassen.html)
+- [Verjährung: 3 Jahre richtig zählen](https://ayyoubaha.github.io/nebenkosten-abrechnung/nebenkostenabrechnung-verjaehrung.html)
+- [Excel-Vorlage oder Rechner?](https://ayyoubaha.github.io/nebenkosten-abrechnung/nebenkostenabrechnung-excel-vorlage.html)
+- [Software-Vergleich: Kauf-Programm, Excel, Browser](https://ayyoubaha.github.io/nebenkosten-abrechnung/nebenkostenabrechnung-software.html)
 
 ## Technik
 
